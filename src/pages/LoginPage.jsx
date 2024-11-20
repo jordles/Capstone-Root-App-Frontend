@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { login } from '../services/api';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function LoginPage() {
   const [userEmail, setUserEmail] = useState('');
@@ -10,9 +10,18 @@ function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
+    
     try {
-      await login(userEmail, password);
-      navigate('/'); // Redirect to home page after successful login
+      const response = await axios.post('http://localhost:3000/api/users/login', {
+        userEmail,
+        password
+      });
+      
+      if (response.data) {
+        // Login successful
+        navigate('/');
+      }
     } catch (err) {
       setError(err.response?.data?.error || 'Login failed');
     }
@@ -21,7 +30,7 @@ function LoginPage() {
   return (
     <div className="login-page">
       <h2>Login</h2>
-      {error && <div className="error">{error}</div>}
+      {error && <div className="error" style={{ color: 'red', marginBottom: '1rem' }}>{error}</div>}
       <form onSubmit={handleSubmit}>
         <div>
           <label>Email or Username:</label>
