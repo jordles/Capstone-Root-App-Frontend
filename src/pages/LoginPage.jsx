@@ -13,16 +13,19 @@ function LoginPage() {
     setError('');
     
     try {
+      console.log('Attempting login with:', { userEmail, password });
       const response = await axios.post('http://localhost:3000/api/users/login', {
         userEmail,
         password
       });
+      console.log('Server response:', response.data);
       
       if (response.data) {
-        // Login successful
+        console.log('Login successful');
         navigate('/');
       }
     } catch (err) {
+      console.error('Login error:', err.response?.data || err.message);
       setError(err.response?.data?.error || 'Login failed');
     }
   };
