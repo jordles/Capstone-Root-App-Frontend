@@ -1,0 +1,37 @@
+.trending-card {
+  background: var(--card-bg);
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.trending-card h3 {
+  color: var(--text-light);
+  margin-top: 0;
+}
+
+.trending-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.trending-card li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9em;
+  color: var(--primary);
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.trending-card li:before {
+  content: "🌱";
+  font-size: 1.2em;
+}
+
+.trending-card li:hover {
+  color: var(--secondary);
+}

@@ -6,8 +6,9 @@
 * Add, Chat, Interact, and View your Friends (Pages: Friends List, others are on a messaging app popup staying on every page)
 * Main Feed page for posting content with other media features added onto it (Pages: Home)
 
-## Libraries 
+## Extra Libraries / Packages
 moment-timezone - for timezone conversion from UTC recorded on mongoose data, regarding posts and messaging times
+emoji-picker-react - for emoji picker on posts and messages
 
 
 ## API (Third Party)

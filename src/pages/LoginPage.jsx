@@ -22,7 +22,7 @@ function LoginPage() {
       
       if (response.data) {
         console.log('Login successful');
-        navigate('/');
+        navigate('/feed');
       }
     } catch (err) {
       console.error('Login error:', err.response?.data || err.message);

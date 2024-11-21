@@ -1,0 +1,90 @@
+/* Dark mode theme colors - plant-inspired */
+:root {
+  --dark-bg: #121212;
+  --card-bg: #1e1e1e;
+  --primary: #019579;    /* Darker version of #02c39a */
+  --secondary: #006d62;  /* Darker version of #00a896 */
+  --accent: #01505a;     /* Darker version of #028090 */
+  --highlight: #034059;  /* Darker version of #05668d */
+  --text-light: #f0f3bd;
+  --text-dark: #a0a3a3;
+  --border: #2d2d2d;
+}
+
+/* Feed Layout */
+.feed-container {
+  display: grid;
+  grid-template-columns: 1fr 2.5fr 1fr;
+  gap: 20px;
+  max-width: inherit;
+}
+
+/* Left Column */
+.feed-left {
+  position: sticky;
+  top: 20px;
+  height: fit-content;
+}
+
+/* Main Feed */
+.feed-main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Right Column */
+.feed-right {
+  position: sticky;
+  top: 20px;
+  height: fit-content;
+}
+
+/* Loading and Error States */
+.loading,
+.error,
+.no-posts {
+  background: var(--card-bg);
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  color: var(--text-light);
+  margin: 20px auto;
+  max-width: 600px;
+}
+
+.error {
+  color: #ff6b6b;
+  border: 1px solid #ff6b6b;
+}
+
+.no-posts {
+  color: var(--text-dark);
+  font-style: italic;
+}
+
+/* Responsive Design */
+@media (max-width: 1280px){
+  .feed-container {
+    padding: 0 20px;
+  }
+}
+
+
+@media (max-width: 1024px) {
+  .feed-container {
+    grid-template-columns: 1fr 2fr;
+  }
+  .feed-right {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .feed-container {
+    grid-template-columns: 1fr;
+  }
+  .feed-left {
+    display: none;
+  }
+}

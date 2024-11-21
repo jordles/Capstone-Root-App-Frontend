@@ -1,0 +1,72 @@
+.post-create-card {
+  background: var(--card-bg);
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.post-create-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.post-create-card textarea {
+  background: var(--dark-bg);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 15px;
+  min-height: 100px;
+  color: var(--text-light);
+  resize: none;
+  font-size: 1rem;
+}
+
+.post-create-card textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.char-count {
+  color: var(--text-dark);
+  font-size: 0.9em;
+  text-align: right;
+  padding: 0 8px;
+}
+
+.post-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+
+.post-media-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.emoji-picker-container {
+  position: relative;
+}
+
+.emoji-picker-popup {
+  position: absolute;
+  /* bottom: 100%;
+  left: 0;
+  margin-bottom: 8px;
+  z-index: 1000; */
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgb(0 0 0 / 20%);
+}
+
+/* Add a small triangle pointer */
+.emoji-picker-popup::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 14px;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid var(--card-bg);
+}

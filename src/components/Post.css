@@ -1,0 +1,59 @@
+.post-card {
+  background: var(--card-bg);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.post-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.post-header img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.post-header h4 {
+  margin: 0;
+  color: var(--text-light);
+}
+
+.post-header span {
+  color: var(--text-dark);
+  font-size: 0.9em;
+}
+
+.post-content {
+  color: var(--text-light);
+  margin-bottom: 15px;
+}
+
+.post-actions {
+  display: flex;
+  gap: 10px;
+  border-top: 1px solid var(--border);
+  padding-top: 15px;
+}
+
+.post-actions button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.9em;
+  background-color: transparent;
+  border: none;
+  color: var(--text-dark);
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.post-actions button:hover {
+  color: var(--primary);
+  transform: scale(1.05);
+}
