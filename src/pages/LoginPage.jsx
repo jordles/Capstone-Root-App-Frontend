@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 
 function LoginPage() {
@@ -55,6 +55,9 @@ function LoginPage() {
         </div>
         <button type="submit">Login</button>
       </form>
+      <div style={{ marginTop: '1rem' }}>
+        <Link to="/forgot-password">Forgot Password?</Link>
+      </div>
     </div>
   );
 }
