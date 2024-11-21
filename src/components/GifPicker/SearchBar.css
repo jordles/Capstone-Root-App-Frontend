@@ -1,0 +1,37 @@
+.gif-search-bar {
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.gif-search-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.gif-search-input:focus {
+  border-color: #007bff;
+}
+
+.favorite-toggle {
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+.favorite-toggle:hover {
+  background-color: #f0f0f0;
+}
+
+.favorite-toggle.active {
+  background-color: #ffe0e0;
+}

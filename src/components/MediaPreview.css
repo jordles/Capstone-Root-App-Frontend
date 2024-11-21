@@ -1,0 +1,40 @@
+.media-preview {
+  position: relative;
+  margin: 10px 0;
+  border-radius: 5px;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.media-preview img,
+.media-preview video {
+  border-radius: 5px;
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+}
+
+.remove-media {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.remove-media:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.remove-media span {
+  color: white;
+  font-size: 20px;
+}

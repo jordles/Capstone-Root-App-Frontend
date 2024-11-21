@@ -8,6 +8,17 @@ function LoginPage() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  const grabLogin = async () => {
+    try {
+      const user = localStorage.getItem('userId')
+      const response = await axios.get(`http://localhost:3000/api/users/${user}/login`);
+      console.log('Login data:', response.data);
+      return await response.data;
+    } catch (err) {
+      console.error('Error fetching login:', err);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -20,7 +31,15 @@ function LoginPage() {
       });
       console.log('Server response:', response.data);
       
+      
+
       if (response.data) {
+        // Store user data in localStorage
+        localStorage.setItem('userId', response.data.user); // _id for the user database
+
+        const login = await grabLogin();
+        localStorage.setItem('loginId', login._id); // _id for the login database
+        localStorage.setItem('userEmail', login.email); 
         console.log('Login successful');
         navigate('/feed');
       }

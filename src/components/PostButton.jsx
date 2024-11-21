@@ -1,11 +1,11 @@
 import './PostButton.css';
 
-function PostButton({ icon, label, onClick, type = 'button', disabled = false }) {
+function PostButton({ icon, label, onClick, type = 'button', disabled = false, className = 'post-button' }) {
   return (
     <button
       type={type}
       onClick={onClick}
-      className="post-button"
+      className={className}
       disabled={disabled}
       title={label}
     >

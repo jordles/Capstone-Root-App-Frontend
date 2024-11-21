@@ -9,11 +9,13 @@
 ## Extra Libraries / Packages
 moment-timezone - for timezone conversion from UTC recorded on mongoose data, regarding posts and messaging times
 emoji-picker-react - for emoji picker on posts and messages
-
+memo - for preventing unnecessary re-renders when react re-renders media preview because of CreatePost parent re-renders
+** useRef: "Keep this value the same between renders" vs memo: "Don't render at all if nothing changed" **
 
 ## API (Third Party)
 tenor- incorporated gif images into my messages and post functionalities
-profile pictures api
+profile pictures api - 
+
 
 ## Attributions
 

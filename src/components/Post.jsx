@@ -22,6 +22,19 @@ function Post({ post, onPostUpdated }) {
       </div>
       <div className="post-content">
         <p>{post.content}</p>
+        {post.mediaUrls && post.mediaUrls.length > 0 && ( // post any media if it exists
+          <div className="post-media">
+            {post.mediaUrls.map((url, index) => (
+              <div key={index} className="media-container">
+                {url.startsWith('data:image') ? ( // if the URL starts with 'data:image', it's an image
+                  <img src={url} alt={`Post media ${index + 1}`} />
+                ) : url.startsWith('data:video') ? ( // if the URL starts with 'data:video', it's a video
+                  <video src={url} controls />
+                ) : null}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
       <div className="post-actions">
         <button onClick={handleLike}>

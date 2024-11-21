@@ -70,3 +70,10 @@
   border-right: 8px solid transparent;
   border-top: 8px solid var(--card-bg);
 }
+
+.media-preview-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+  margin: 10px 0;
+}

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ProfileCard from '../components/ProfileCard';
 import CreatePost from '../components/CreatePost';
@@ -10,10 +11,19 @@ function FeedPage() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
   
   useEffect(() => {
+    // Check if user is logged in
+    const userId = localStorage.getItem('userId');
+    const loginID = localStorage.getItem('loginId');
+    const userEmail = localStorage.getItem('userEmail');
+    if (!userId || !loginID || !userEmail) {
+      navigate('/login');
+      return;
+    }
     fetchPosts();
-  }, []);
+  }, [navigate]);
 
   const fetchPosts = async () => {
     try {
@@ -26,6 +36,10 @@ function FeedPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const addNewPost = (newPost) => {
+    setPosts(prevPosts => [newPost, ...prevPosts]);
   };
 
   if (loading) {
@@ -43,7 +57,7 @@ function FeedPage() {
       </div>
 
       <div className="feed-main">
-        <CreatePost onPostCreated={fetchPosts} />
+        <CreatePost onPostCreated={addNewPost} />
         <div className="posts-container">
           {posts.length === 0 ? (
             <div className="no-posts">No posts yet. Be the first to share!</div>
