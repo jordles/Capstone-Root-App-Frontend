@@ -6,66 +6,66 @@
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.post-header {
+.post-card .post-header {
   display: flex;
   align-items: center;
   gap: 10px;
   margin-bottom: 15px;
 }
 
-.post-header img {
+.post-card .post-header img {
   width: 40px;
   height: 40px;
   border-radius: 50%;
   margin-right: 15px;
 }
 
-.post-header h4 {
+.post-card .post-header h4 {
   margin: 0;
   color: var(--text-light);
 }
 
-.post-header span {
+.post-card .post-header span {
   color: var(--text-dark);
   font-size: 0.9em;
 }
 
-.post-content {
+.post-card .post-content {
   color: var(--text-light);
   margin-bottom: 15px;
 }
 
-.post-content p {
+.post-card .post-content p {
   margin: 0;
   line-height: 1.5;
 }
 
-.post-media {
+.post-card .post-media {
   margin-top: 15px;
 }
 
-.media-container {
+.post-card .media-container {
   margin-top: 10px;
   border-radius: 8px;
   overflow: hidden;
 }
 
-.media-container img,
-.media-container video {
+.post-card .media-container img,
+.post-card .media-container video {
   max-width: 100%;
   height: auto;
   display: block;
   border-radius: 8px;
 }
 
-.post-actions {
+.post-card .post-actions {
   display: flex;
   gap: 10px;
   border-top: 1px solid var(--border);
   padding-top: 15px;
 }
 
-.post-actions button {
+.post-card .post-actions button {
   display: flex;
   align-items: center;
   gap: 5px;
@@ -78,7 +78,7 @@
   transition: all 0.2s;
 }
 
-.post-actions button:hover {
+.post-card .post-actions button:hover {
   color: var(--primary);
   transform: scale(1.05);
 }

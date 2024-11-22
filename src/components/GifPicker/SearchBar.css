@@ -2,36 +2,68 @@
   display: flex;
   gap: 8px;
   padding: 8px;
-  border-bottom: 1px solid #eee;
+  background: #333333;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  height: 40px;
+  align-items: center;
 }
 
 .gif-search-input {
-  flex: 1;
-  padding: 8px 12px;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  font-size: 14px;
+  flex-grow: 1;
+  border: none;
+  background: none;
   outline: none;
-  transition: border-color 0.2s;
+  font-size: 0.9rem;
+  color: #fff;
+  padding: 0;
+  height: 24px;
+  line-height: 24px;
 }
 
-.gif-search-input:focus {
-  border-color: #007bff;
+.gif-search-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .favorite-toggle {
-  background: none;
-  border: none;
-  padding: 8px;
+  padding: 4px;
   cursor: pointer;
-  border-radius: 8px;
-  transition: background-color 0.2s;
+  border-radius: 4px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  color: rgba(255, 255, 255, 0.7);
+  background: #333333;
+  border: none;
 }
 
 .favorite-toggle:hover {
-  background-color: #f0f0f0;
+  color: #ff4081;
 }
 
 .favorite-toggle.active {
-  background-color: #ffe0e0;
+  color: #ff4081;
+}
+
+.post-actions button.favorite-toggle{
+  color: unset;
+}
+
+.post-actions button.favorite-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.post-actions button.favorite-toggle.active {
+  background-color: rgba(255, 0, 0, 0.1);
+}
+
+.favorite-button{
+  padding: 0;
+}
+
+.favorite-button:hover{
+  background: none;
 }

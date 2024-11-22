@@ -13,7 +13,7 @@ const GifGrid = memo(function GifGrid({
   }
 
   if (gifs.length === 0) {
-    return <div className="gif-empty">No GIFs found</div>;
+    return <div className="gif-empty">Powered By Tenor</div>;
   }
 
   return (

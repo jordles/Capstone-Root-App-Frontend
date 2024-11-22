@@ -26,14 +26,14 @@
   border-color: var(--primary);
 }
 
-.char-count {
+.post-create-card .char-count {
   color: var(--text-dark);
   font-size: 0.9em;
   text-align: right;
   padding: 0 8px;
 }
 
-.post-actions {
+.post-create-card .post-actions {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -41,39 +41,64 @@
   padding-top: 12px;
 }
 
-.post-media-buttons {
+.post-create-card .post-media-buttons {
   display: flex;
   gap: 8px;
 }
 
-.emoji-picker-container {
+.post-create-card .post-actions .emoji-picker-container,
+.post-create-card .post-actions .gif-picker-container {
   position: relative;
 }
 
-.emoji-picker-popup {
+.post-create-card .post-actions .emoji-picker-popup{
   position: absolute;
-  /* bottom: 100%;
+  top: calc(100% + 10px);
   left: 0;
-  margin-bottom: 8px;
-  z-index: 1000; */
+  /* z-index: 1000; */
   border-radius: 10px;
   box-shadow: 0 4px 20px rgb(0 0 0 / 20%);
+  background: #222222;
 }
 
-/* Add a small triangle pointer */
-.emoji-picker-popup::after {
+.post-create-card .post-actions .emoji-picker-popup .EmojiPickerReact {
+  border: 1px solid #151617 !important;
+  --epr-bg-color: #222222 !important;
+  --epr-category-label-bg-color: #222222 !important;
+  --epr-hover-bg-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.post-create-card .post-actions .emoji-picker-popup.emoji-picker-popup::before {
   content: '';
   position: absolute;
-  bottom: -8px;
+  top: -8px;
   left: 14px;
   border-left: 8px solid transparent;
   border-right: 8px solid transparent;
-  border-top: 8px solid var(--card-bg);
+  border-bottom: 8px solid #151617;
+  z-index: 1;
 }
 
-.media-preview-list {
+.post-create-card .post-actions .emoji-picker-popup.emoji-picker-popup::after {
+  content: '';
+  position: absolute;
+  top: -7px;
+  left: 14px;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid #222222;
+  z-index: 2;
+}
+
+
+
+.post-create-card .media-preview-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 10px;
   margin: 10px 0;
+}
+
+.emoji-picker-popup button{
+  padding: 0;
 }

@@ -3,13 +3,16 @@ import axios from 'axios';
 import PostButton from './PostButton';
 import EmojiPicker from 'emoji-picker-react';
 import MediaPreview from './MediaPreview';
+import GifPicker from './GifPicker/GifPicker';
 import './CreatePost.css';
 
 function CreatePost({ onPostCreated }) {
   const [newPost, setNewPost] = useState('');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [showGifPicker, setShowGifPicker] = useState(false);
   const [mediaList, setMediaList] = useState([]);
   const emojiPickerRef = useRef(null);
+  const gifPickerRef = useRef(null);
   const imageInputRef = useRef(null);
   const videoInputRef = useRef(null);
 
@@ -17,6 +20,9 @@ function CreatePost({ onPostCreated }) {
     const handleClickOutside = (event) => {
       if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target)) {
         setShowEmojiPicker(false);
+      }
+      if (gifPickerRef.current && !gifPickerRef.current.contains(event.target)) {
+        setShowGifPicker(false);
       }
     };
 
@@ -143,8 +149,14 @@ function CreatePost({ onPostCreated }) {
     }
   }, []);
 
-  const handleGifClick = useCallback(() => {
-    console.log('GIF selection clicked');
+  const handleGifSelect = useCallback((gifUrl) => {
+    const newMedia = {
+      id: Date.now(),
+      type: 'image',
+      url: gifUrl
+    };
+    setMediaList(prev => [...prev, newMedia]);
+    setShowGifPicker(false);
   }, []);
 
   return (
@@ -206,6 +218,22 @@ function CreatePost({ onPostCreated }) {
                 </div>
               )}
             </div>
+            <div className="gif-picker-container">
+              <PostButton
+                icon="gif"
+                label="Add GIF"
+                onClick={() => setShowGifPicker(!showGifPicker)}
+              />
+              {showGifPicker && (
+                <div className="gif-picker-popup" ref={gifPickerRef}>
+                  <GifPicker
+                    isOpen={showGifPicker}
+                    onClose={() => setShowGifPicker(false)}
+                    onGifSelect={handleGifSelect}
+                  />
+                </div>
+              )}
+            </div>
             <PostButton
               icon="image"
               label="Add image"
@@ -215,11 +243,6 @@ function CreatePost({ onPostCreated }) {
               icon="videocam"
               label="Add video"
               onClick={handleVideoClick}
-            />
-            <PostButton
-              icon="gif"
-              label="Add GIF"
-              onClick={handleGifClick}
             />
           </div>
           <PostButton
