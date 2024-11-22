@@ -1,4 +1,6 @@
-# React + Vite
+# Capstone Root App Frontend
+
+[Backend](https://github.com/jordles/Capstone-Root-App-Backend)
 
 ## Features and Usage
 
