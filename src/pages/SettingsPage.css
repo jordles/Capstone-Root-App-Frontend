@@ -1,0 +1,122 @@
+.settings-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.settings-container {
+  background: var(--card-bg);
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.settings-container h1 {
+  margin: 0 0 20px;
+  color: var(--color-text);
+  font-size: 24px;
+}
+
+.error-message {
+  background: var(--color-error-light);
+  color: var(--color-error);
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.form-section {
+  margin-bottom: 30px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.form-section:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.form-section h2 {
+  color: var(--color-text);
+  font-size: 18px;
+  margin: 0 0 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--input-bg);
+  color: var(--color-text);
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-light);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 30px;
+}
+
+.cancel-btn,
+.save-btn {
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancel-btn {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.cancel-btn:hover {
+  background: var(--color-border);
+}
+
+.save-btn {
+  background: var(--color-primary);
+  border: none;
+  color: white;
+}
+
+.save-btn:hover {
+  background: var(--color-primary-dark);
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: var(--color-text);
+  font-size: 18px;
+}
