@@ -4,7 +4,8 @@ import axios from 'axios';
 import ProfileCard from '../components/ProfileCard';
 import CreatePost from '../components/CreatePost';
 import Post from '../components/Post';
-import TrendingTopics from '../components/TrendingTopics';
+// import TrendingTopics from '../components/TrendingTopics';
+import Aside from '../components/aside/Aside';
 import './FeedPage.css';
 
 function FeedPage() {
@@ -74,7 +75,7 @@ function FeedPage() {
       </div>
 
       <div className="feed-right">
-        <TrendingTopics />
+        <Aside />
       </div>
     </div>
   );
