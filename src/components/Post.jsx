@@ -76,7 +76,7 @@ function Post({ post, onPostUpdated }) {
           <div className="post-media">
             {post.mediaUrls.map((url, index) => (
               <div key={index} className="media-container">
-                {url.startsWith('data:image') ? (
+                {url.startsWith('data:image') || url.endsWith('.gif') ? (
                   <img src={url} alt={`Post media ${index + 1}`} />
                 ) : url.startsWith('data:video') ? (
                   <video src={url} controls />
@@ -87,7 +87,7 @@ function Post({ post, onPostUpdated }) {
         )}
       </div>
       <div className="post-actions">
-        <button onClick={handleLike}>
+      <button onClick={handleLike}>
           🤍 {post.likes?.length || 0}
         </button>
         <button>💬 Comment</button>

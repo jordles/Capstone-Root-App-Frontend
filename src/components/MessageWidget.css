@@ -29,7 +29,7 @@
   position: absolute;
   bottom: 60px;
   right: 0;
-  width: 300px;
+  width: 320px;
   max-height: 500px;
   background-color: var(--card-bg);
   border: 1px solid var(--border);
@@ -56,12 +56,13 @@
 
 .conversation-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   padding: 10px;
   cursor: pointer;
   border-radius: 8px;
   transition: background-color 0.2s ease;
   color: var(--text-light);
+  margin-bottom: 4px;
 }
 
 .conversation-item:hover {
@@ -72,39 +73,55 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  margin-right: 10px;
+  margin-right: 12px;
   object-fit: cover;
 }
 
 .conversation-info {
   flex: 1;
-  overflow: hidden;
+  min-width: 0; /* Enables text truncation */
+}
+
+.conversation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
 }
 
 .conversation-info .name {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 2px;
+  font-weight: 600;
+  color: var(--text-light);
+  margin-right: 8px;
+}
+
+.conversation-info .time {
+  font-size: 0.8em;
+  color: var(--text-secondary);
+  white-space: nowrap;
 }
 
 .conversation-info .last-message {
+  text-align: left;
   display: block;
   font-size: 0.9em;
-  color: var(--text-dark);
+  color: var(--text-secondary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-width: 220px;
 }
 
 .no-conversations {
   text-align: center;
   padding: 20px;
-  color: var(--text-dark);
+  color: var(--text-secondary);
 }
 
 .no-conversations .hint {
   font-size: 0.9em;
   margin-top: 10px;
+  color: var(--text-secondary);
 }
 
 .loading {

@@ -17,14 +17,11 @@ function DirectMessage({ recipient, onClose, onMessageSent }) {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/messages/conversation?user1=${currentUserId}&user2=${recipient._id}`);
-        setMessages(response.data);
+        const response = await axios.get(`http://localhost:3000/api/messages/conversation/${currentUserId}/${recipient._id}`);
+        setMessages([...response.data].reverse()); // Reverse the messages array
         scrollToBottom();
       } catch (err) {
-        // It's okay if there are no messages yet
-        if (err.response?.status !== 404) {
-          console.error('Error fetching messages:', err);
-        }
+        console.error('Error fetching messages:', err);
       }
     };
     
@@ -50,7 +47,7 @@ function DirectMessage({ recipient, onClose, onMessageSent }) {
       });
 
       // Add new message to the messages array
-      setMessages(prev => [...prev, response.data]);
+      setMessages(prev => [...prev.slice(0, -1), response.data, prev.slice(-1)]);
       
       // Clear input and notify parent
       setMessage('');
@@ -79,36 +76,34 @@ function DirectMessage({ recipient, onClose, onMessageSent }) {
         </div>
       </div>
 
-      <div className="direct-message-content">
-        <div className="messages-container">
-          {messages.length === 0 ? (
-            <p className="start-message">
-              Start a conversation with {recipient.name.display}
-            </p>
-          ) : (
-            messages.map(msg => (
-              <div 
-                key={msg._id}
-                className={`message ${msg.sender._id === currentUserId ? 'sent' : 'received'}`}
-              >
-                {msg.content}
-              </div>
-            ))
-          )}
-          <div ref={messagesEndRef} />
-        </div>
+      <div className="messages-container">
+        {messages.length === 0 ? (
+          <p className="start-message">
+            Start a conversation with {recipient.name.display}
+          </p>
+        ) : (
+          messages.map(msg => (
+            <div 
+              key={msg._id}
+              className={`message ${msg.sender === currentUserId ? 'sent' : 'received'}`}
+            >
+              {msg.content}
+            </div>
+          ))
+        )}
+        <div ref={messagesEndRef} />
       </div>
 
-      <form onSubmit={handleSendMessage} className="message-input">
+      <form className="message-input" onSubmit={handleSendMessage}>
         <input
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          placeholder="Type your message..."
+          placeholder="Type a message..."
           disabled={sending}
         />
         <button type="submit" disabled={sending || !message.trim()}>
-          <span className="material-symbols-rounded">send</span>
+          Send
         </button>
       </form>
     </div>

@@ -17,55 +17,50 @@ function MessageWidget() {
       setLoading(true);
       try {
         // Get all unique users you've messaged with
-        const response = await axios.get(`http://localhost:3000/api/messages/conversation?user1=${currentUserId}`);
-        const messages = response.data;
+        const response = await axios.get(`http://localhost:3000/api/messages/conversations/${currentUserId}`);
+        const userIds = response.data;
 
-        // Create a map to store unique users and their last message
-        const userMap = new Map();
-        
-        // Process each message to build conversation list
-        messages.forEach(msg => {
-          // Determine if the other user is the sender or recipient
-          const otherUserId = msg.sender === currentUserId ? msg.recipient : msg.sender;
-          
-          // If we haven't seen this user before, or if this message is newer
-          if (!userMap.has(otherUserId) || 
-              new Date(msg.createdAt) > new Date(userMap.get(otherUserId).lastMessage.createdAt)) {
-            userMap.set(otherUserId, {
-              lastMessage: msg,
-              _id: otherUserId
-            });
-          }
-        });
+        console.log('User IDs:', userIds);
 
-        // Convert the map values to an array and fetch user details
-        const conversationsList = await Promise.all(
-          Array.from(userMap.values()).map(async (conv) => {
+        // Get user details and last message for each conversation
+        const conversationsData = await Promise.all(
+          userIds.map(async (userId) => {
             try {
-              // Get user details for each conversation
-              const userResponse = await axios.get(`http://localhost:3000/api/users/${conv._id}`);
+              // Get user details
+              const userResponse = await axios.get(`http://localhost:3000/api/users/${userId}`);
+              
+              // Get the conversation history
+              const messagesResponse = await axios.get(
+                `http://localhost:3000/api/messages/conversation/${currentUserId}/${userId}`
+              );
+              
+              // Get the last message
+              const messages = messagesResponse.data;
+              const lastMessage = messages[0];
+
               return {
                 ...userResponse.data,
-                lastMessage: conv.lastMessage
+                lastMessage: lastMessage
               };
             } catch (err) {
-              console.error('Error fetching user details:', err);
-              return conv;
+              console.error('Error fetching conversation details:', err);
+              return null;
             }
           })
         );
 
-        // Sort conversations by most recent message
-        const sortedConversations = conversationsList.sort((a, b) => {
-          return new Date(b.lastMessage.createdAt) - new Date(a.lastMessage.createdAt);
-        });
+        // Filter out any failed fetches and sort by latest message
+        const validConversations = conversationsData
+          .filter(conv => conv !== null)
+          .sort((a, b) => {
+            if (!a.lastMessage) return 1;
+            if (!b.lastMessage) return -1;
+            return new Date(b.lastMessage.createdAt) - new Date(a.lastMessage.createdAt);
+          });
 
-        setConversations(sortedConversations);
+        setConversations(validConversations);
       } catch (err) {
-        // It's okay if there are no messages yet
-        if (err.response?.status !== 404) {
-          console.error('Error fetching conversations:', err);
-        }
+        console.error('Error fetching conversations:', err);
       } finally {
         setLoading(false);
       }
@@ -82,48 +77,45 @@ function MessageWidget() {
   };
 
   const handleMessageSent = () => {
-    // Refresh conversations after sending a message
+    // Refresh conversations list after sending a message
     const fetchConversations = async () => {
       try {
-        const messagesResponse = await axios.get(`http://localhost:3000/api/messages/conversation?user1=${currentUserId}`);
-        const messages = messagesResponse.data;
+        const response = await axios.get(`http://localhost:3000/api/messages/conversations/${currentUserId}`);
+        const userIds = response.data;
 
-        const userMap = new Map();
-        messages.forEach(msg => {
-          const otherUserId = msg.sender === currentUserId ? msg.recipient : msg.sender;
-          if (!userMap.has(otherUserId) || 
-              new Date(msg.createdAt) > new Date(userMap.get(otherUserId).lastMessage.createdAt)) {
-            userMap.set(otherUserId, {
-              lastMessage: msg,
-              _id: otherUserId
-            });
-          }
-        });
-
-        const conversationsList = await Promise.all(
-          Array.from(userMap.values()).map(async (conv) => {
+        const conversationsData = await Promise.all(
+          userIds.map(async (userId) => {
             try {
-              const userResponse = await axios.get(`http://localhost:3000/api/users/${conv._id}`);
+              const userResponse = await axios.get(`http://localhost:3000/api/users/${userId}`);
+              const messagesResponse = await axios.get(
+                `http://localhost:3000/api/messages/conversation/${currentUserId}/${userId}`
+              );
+              
+              const messages = messagesResponse.data;
+              const lastMessage = messages[messages.length - 1];
+
               return {
                 ...userResponse.data,
-                lastMessage: conv.lastMessage
+                lastMessage: lastMessage
               };
             } catch (err) {
-              console.error('Error fetching user details:', err);
-              return conv;
+              console.error('Error fetching conversation details:', err);
+              return null;
             }
           })
         );
 
-        const sortedConversations = conversationsList.sort((a, b) => {
-          return new Date(b.lastMessage.createdAt) - new Date(a.lastMessage.createdAt);
-        });
+        const validConversations = conversationsData
+          .filter(conv => conv !== null)
+          .sort((a, b) => {
+            if (!a.lastMessage) return 1;
+            if (!b.lastMessage) return -1;
+            return new Date(b.lastMessage.createdAt) - new Date(a.lastMessage.createdAt);
+          });
 
-        setConversations(sortedConversations);
+        setConversations(validConversations);
       } catch (err) {
-        if (err.response?.status !== 404) {
-          console.error('Error refreshing conversations:', err);
-        }
+        console.error('Error refreshing conversations:', err);
       }
     };
 
@@ -136,6 +128,23 @@ function MessageWidget() {
     setIsOpen(true);
   };
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diff = now - date;
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+    if (days === 0) {
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    } else if (days === 1) {
+      return 'Yesterday';
+    } else if (days < 7) {
+      return date.toLocaleDateString([], { weekday: 'short' });
+    } else {
+      return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
+    }
+  };
+
   return (
     <div className={`message-widget ${isOpen ? 'open' : ''}`}>
       <button className="message-widget-toggle" onClick={toggleWidget}>
@@ -145,48 +154,60 @@ function MessageWidget() {
       </button>
 
       {isOpen && (
-        <div className="message-widget-content">
-          {selectedUser ? (
+        <>
+          {selectedUser && (
             <DirectMessage
               recipient={selectedUser}
               onClose={() => setSelectedUser(null)}
               onMessageSent={handleMessageSent}
             />
-          ) : (
-            <>
-              <h3>Messages</h3>
-              <div className="conversations-list">
-                {loading ? (
-                  <div className="loading">Loading conversations...</div>
-                ) : conversations.length > 0 ? (
-                  conversations.map(conv => (
-                    <div
-                      key={conv._id}
-                      className="conversation-item"
-                      onClick={() => setSelectedUser(conv)}
-                    >
-                      <img 
-                        src={conv.profilePicture || "https://via.placeholder.com/40"} 
-                        alt={conv.name.display}
-                      />
-                      <div className="conversation-info">
-                        <span className="name">{conv.name.display}</span>
-                        <span className="last-message">
-                          {conv.lastMessage?.content || 'Start a conversation'}
-                        </span>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="no-conversations">
-                    <p>No conversations yet</p>
-                    <p className="hint">Click the message button on someone's profile to start chatting!</p>
-                  </div>
-                )}
-              </div>
-            </>
           )}
-        </div>
+          <div className="message-widget-content">
+            <h3>Messages</h3>
+            <div className="conversations-list">
+              {loading ? (
+                <div className="loading">Loading conversations...</div>
+              ) : conversations.length > 0 ? (
+                conversations.map(conv => (
+                  console.log(conv),
+                  <div
+                    key={conv._id}
+                    className="conversation-item"
+                    onClick={() => setSelectedUser(conv)}
+                  >
+                    {/* <ProfilePic user={conv} /> */}
+                    <img 
+                      src={conv.profilePicture || "https://via.placeholder.com/40"} 
+                      alt={conv.name.display}
+                    />
+                    <div className="conversation-info">
+                      <div className="conversation-header">
+                        <span className="name">{conv.name.display}</span>
+                        <span className="handle">@{conv.name.handle}</span>
+                        {conv.lastMessage && (
+                          <span className="time">{formatDate(conv.lastMessage.createdAt)}</span>
+                        )}
+                      </div>
+                      <span className="last-message">
+                        {conv.lastMessage ? 
+                          (conv.lastMessage.sender === localStorage.getItem('userId') ? 
+                            `You: ${conv.lastMessage.content}` : 
+                            `${conv.name.display}: ${conv.lastMessage.content}`
+                          ) : 'Start a conversation'
+                        }
+                      </span>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="no-conversations">
+                  <p>No conversations yet</p>
+                  <p className="hint">Click the message button on someone's profile to start chatting!</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </>
       )}
     </div>
   );
