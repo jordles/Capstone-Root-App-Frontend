@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import DirectMessage from './messages/DirectMessage';
 import './MessageWidget.css';
 
 function MessageWidget() {
@@ -7,6 +8,7 @@ function MessageWidget() {
   const [conversations, setConversations] = useState([]);
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [message, setMessage] = useState('');
+  const [newMessageRecipient, setNewMessageRecipient] = useState(null);
   const currentUserId = localStorage.getItem('userId');
 
   useEffect(() => {
@@ -38,6 +40,10 @@ function MessageWidget() {
       // Refresh conversation
       const response = await axios.get(`http://localhost:3000/api/conversations/${selectedConversation._id}`);
       setSelectedConversation(response.data);
+      
+      // Also update the conversations list
+      const conversationsResponse = await axios.get(`http://localhost:3000/api/conversations/${currentUserId}`);
+      setConversations(conversationsResponse.data);
     } catch (err) {
       console.error('Error sending message:', err);
     }
@@ -50,76 +56,103 @@ function MessageWidget() {
     }
   };
 
+  const handleNewConversation = (conversation) => {
+    setConversations(prev => [conversation, ...prev]);
+    setNewMessageRecipient(null);
+  };
+
+  // This function will be called from the profile page
+  window.startNewMessage = (recipient) => {
+    setNewMessageRecipient(recipient);
+    setIsOpen(true);
+  };
+
   return (
-    <div className={`message-widget ${isOpen ? 'open' : ''}`}>
-      <button className="message-widget-toggle" onClick={toggleWidget}>
-        <span className="material-symbols-rounded">
-          {isOpen ? 'close' : 'chat'}
-        </span>
-      </button>
+    <>
+      <div className={`message-widget ${isOpen ? 'open' : ''}`}>
+        <button className="message-widget-toggle" onClick={toggleWidget}>
+          <span className="material-symbols-rounded">
+            {isOpen ? 'close' : 'chat'}
+          </span>
+        </button>
 
-      {isOpen && (
-        <div className="message-widget-content">
-          {!selectedConversation ? (
-            <>
-              <h3>Messages</h3>
-              <div className="conversations-list">
-                {conversations.map(conv => (
-                  <div
-                    key={conv._id}
-                    className="conversation-item"
-                    onClick={() => setSelectedConversation(conv)}
-                  >
-                    <img 
-                      src={conv.participant.profilePicture || "https://via.placeholder.com/40"} 
-                      alt={conv.participant.name.display}
-                    />
-                    <div className="conversation-info">
-                      <span className="name">{conv.participant.name.display}</span>
-                      <span className="last-message">
-                        {conv.lastMessage?.content || 'Start a conversation'}
-                      </span>
+        {isOpen && (
+          <div className="message-widget-content">
+            {!selectedConversation ? (
+              <>
+                <h3>Messages</h3>
+                <div className="conversations-list">
+                  {conversations.map(conv => (
+                    <div
+                      key={conv._id}
+                      className="conversation-item"
+                      onClick={() => setSelectedConversation(conv)}
+                    >
+                      <img 
+                        src={conv.participant.profilePicture || "https://via.placeholder.com/40"} 
+                        alt={conv.participant.name.display}
+                      />
+                      <div className="conversation-info">
+                        <span className="name">{conv.participant.name.display}</span>
+                        <span className="last-message">
+                          {conv.lastMessage?.content || 'Start a conversation'}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            </>
-          ) : (
-            <div className="conversation-view">
-              <div className="conversation-header">
-                <button onClick={() => setSelectedConversation(null)}>
-                  <span className="material-symbols-rounded">arrow_back</span>
-                </button>
-                <span>{selectedConversation.participant.name.display}</span>
-              </div>
-              
-              <div className="messages-container">
-                {selectedConversation.messages?.map(msg => (
-                  <div
-                    key={msg._id}
-                    className={`message ${msg.sender === currentUserId ? 'sent' : 'received'}`}
-                  >
-                    {msg.content}
-                  </div>
-                ))}
-              </div>
+                  ))}
+                  {conversations.length === 0 && (
+                    <div className="no-conversations">
+                      <p>No conversations yet</p>
+                      <p className="hint">Click the message button on someone's profile to start chatting!</p>
+                    </div>
+                  )}
+                </div>
+              </>
+            ) : (
+              <div className="conversation-view">
+                <div className="conversation-header">
+                  <button onClick={() => setSelectedConversation(null)}>
+                    <span className="material-symbols-rounded">arrow_back</span>
+                  </button>
+                  <span>{selectedConversation.participant.name.display}</span>
+                </div>
+                
+                <div className="messages-container">
+                  {selectedConversation.messages?.map(msg => (
+                    <div
+                      key={msg._id}
+                      className={`message ${msg.sender === currentUserId ? 'sent' : 'received'}`}
+                    >
+                      {msg.content}
+                    </div>
+                  ))}
+                </div>
 
-              <form onSubmit={handleSendMessage} className="message-input">
-                <input
-                  type="text"
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Type a message..."
-                />
-                <button type="submit">
-                  <span className="material-symbols-rounded">send</span>
-                </button>
-              </form>
-            </div>
-          )}
-        </div>
+                <form onSubmit={handleSendMessage} className="message-input">
+                  <input
+                    type="text"
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    placeholder="Type a message..."
+                  />
+                  <button type="submit">
+                    <span className="material-symbols-rounded">send</span>
+                  </button>
+                </form>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {newMessageRecipient && (
+        <DirectMessage
+          recipient={newMessageRecipient}
+          onClose={() => setNewMessageRecipient(null)}
+          onConversationCreated={handleNewConversation}
+        />
       )}
-    </div>
+    </>
   );
 }
 

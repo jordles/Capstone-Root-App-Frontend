@@ -72,10 +72,15 @@ function ProfilePage() {
     }
   }, [user?._id, navigate]);
 
-  const handleMessage = useCallback(async () => {
-    // Here you can implement the messaging functionality
-    console.log('Message button clicked');
-  }, []);
+  const handleMessage = useCallback(() => {
+    if (window.startNewMessage && user) {
+      window.startNewMessage({
+        _id: user._id,
+        name: user.name,
+        profilePicture: user.profilePicture
+      });
+    }
+  }, [user]);
 
   const profileContent = useMemo(() => {
     if (loading) return <div className="profile-page loading">Loading...</div>;
@@ -103,7 +108,7 @@ function ProfilePage() {
             </div>
             <div className="profile-details">
               <div className="profile-names">
-                <h1>{user.name.display}</h1>
+              <h1>{user.name.display}</h1>
                 <span className="handle">@{user.name.handle}</span>
               </div>
               <p className="bio">{user.bio || 'No bio available'}</p>
@@ -121,36 +126,37 @@ function ProfilePage() {
                   <span className="label">Following</span>
                 </div>
               </div>
+
               <div className="profile-actions">
                 {isOwnProfile ? (
                   <>
-                    <Link to="/settings" className="edit-profile-btn">
-                      Edit Profile
-                    </Link>
+                    <Link to="/settings" className="edit-profile-btn">Edit Profile</Link>
                     <button onClick={handleDeleteAccount} className="delete-account-btn">
                       Delete Account
                     </button>
                   </>
                 ) : (
-                  <div className="other-profile-actions">
+                  <>
                     <button className="follow-btn">
                       Follow
                     </button>
-                    <button onClick={handleMessage} className="message-btn">
-                      <span className="material-symbols-rounded">mail</span>
+                    <button className="message-btn" onClick={handleMessage}>
+                      <span className="material-symbols-rounded">chat</span>
                       Message
                     </button>
-                  </div>
+                  </>
                 )}
               </div>
             </div>
           </div>
         </div>
-        
-        <ProfilePosts posts={posts} />
+
+        <div className="profile-content">
+          <ProfilePosts posts={posts} />
+        </div>
       </div>
     );
-  }, [user, stats, isOwnProfile, handleDeleteAccount, handleMessage, loading, error, posts]);
+  }, [loading, error, user, stats, isOwnProfile, handleDeleteAccount, handleMessage, posts]);
 
   return profileContent;
 }
