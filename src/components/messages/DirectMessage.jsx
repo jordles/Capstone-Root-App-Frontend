@@ -47,7 +47,11 @@ function DirectMessage({ recipient, onClose, onMessageSent }) {
       });
 
       // Add new message to the messages array
-      setMessages(prev => [...prev.slice(0, -1), response.data, prev.slice(-1)]);
+      const newMessage = {
+        ...response.data,
+        sender: currentUserId // Ensure sender is set correctly
+      };
+      setMessages(prev => [...prev, newMessage]);
       
       // Clear input and notify parent
       setMessage('');

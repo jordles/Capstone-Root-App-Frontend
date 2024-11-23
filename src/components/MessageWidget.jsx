@@ -8,6 +8,7 @@ function MessageWidget() {
   const [conversations, setConversations] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [messageUpdate, setMessageUpdate] = useState(0);
   const currentUserId = localStorage.getItem('userId');
 
   useEffect(() => {
@@ -16,25 +17,17 @@ function MessageWidget() {
       
       setLoading(true);
       try {
-        // Get all unique users you've messaged with
         const response = await axios.get(`http://localhost:3000/api/messages/conversations/${currentUserId}`);
         const userIds = response.data;
 
-        console.log('User IDs:', userIds);
-
-        // Get user details and last message for each conversation
         const conversationsData = await Promise.all(
           userIds.map(async (userId) => {
             try {
-              // Get user details
               const userResponse = await axios.get(`http://localhost:3000/api/users/${userId}`);
-              
-              // Get the conversation history
               const messagesResponse = await axios.get(
                 `http://localhost:3000/api/messages/conversation/${currentUserId}/${userId}`
               );
               
-              // Get the last message
               const messages = messagesResponse.data;
               const lastMessage = messages[0];
 
@@ -49,7 +42,6 @@ function MessageWidget() {
           })
         );
 
-        // Filter out any failed fetches and sort by latest message
         const validConversations = conversationsData
           .filter(conv => conv !== null)
           .sort((a, b) => {
@@ -67,7 +59,7 @@ function MessageWidget() {
     };
 
     fetchConversations();
-  }, [isOpen, currentUserId]);
+  }, [isOpen, currentUserId, messageUpdate]);
 
   const toggleWidget = () => {
     setIsOpen(!isOpen);
@@ -77,49 +69,7 @@ function MessageWidget() {
   };
 
   const handleMessageSent = () => {
-    // Refresh conversations list after sending a message
-    const fetchConversations = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3000/api/messages/conversations/${currentUserId}`);
-        const userIds = response.data;
-
-        const conversationsData = await Promise.all(
-          userIds.map(async (userId) => {
-            try {
-              const userResponse = await axios.get(`http://localhost:3000/api/users/${userId}`);
-              const messagesResponse = await axios.get(
-                `http://localhost:3000/api/messages/conversation/${currentUserId}/${userId}`
-              );
-              
-              const messages = messagesResponse.data;
-              const lastMessage = messages[messages.length - 1];
-
-              return {
-                ...userResponse.data,
-                lastMessage: lastMessage
-              };
-            } catch (err) {
-              console.error('Error fetching conversation details:', err);
-              return null;
-            }
-          })
-        );
-
-        const validConversations = conversationsData
-          .filter(conv => conv !== null)
-          .sort((a, b) => {
-            if (!a.lastMessage) return 1;
-            if (!b.lastMessage) return -1;
-            return new Date(b.lastMessage.createdAt) - new Date(a.lastMessage.createdAt);
-          });
-
-        setConversations(validConversations);
-      } catch (err) {
-        console.error('Error refreshing conversations:', err);
-      }
-    };
-
-    fetchConversations();
+    setMessageUpdate(prev => prev + 1); // Trigger conversation refresh
   };
 
   // This function will be called from the profile page
@@ -156,6 +106,7 @@ function MessageWidget() {
       {isOpen && (
         <>
           {selectedUser && (
+            console.log(selectedUser),
             <DirectMessage
               recipient={selectedUser}
               onClose={() => setSelectedUser(null)}
