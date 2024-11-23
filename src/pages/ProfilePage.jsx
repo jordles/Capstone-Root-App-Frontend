@@ -5,7 +5,7 @@ import ProfilePosts from '../components/profile/ProfilePosts';
 import './ProfilePage.css';
 
 function ProfilePage() {
-  const { handle } = useParams();
+  const { handle } = useParams(); // Get the handle from the URL
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);

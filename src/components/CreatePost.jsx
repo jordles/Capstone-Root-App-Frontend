@@ -8,16 +8,16 @@ import './CreatePost.css';
 
 function CreatePost({ onPostCreated }) {
   const [newPost, setNewPost] = useState('');
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false); //toggle popup windows
   const [showGifPicker, setShowGifPicker] = useState(false);
   const [mediaList, setMediaList] = useState([]);
-  const emojiPickerRef = useRef(null);
+  const emojiPickerRef = useRef(null); //reference our dom elements
   const gifPickerRef = useRef(null);
   const imageInputRef = useRef(null);
   const videoInputRef = useRef(null);
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
+    const handleClickOutside = (event) => { //if user clicks outside of the pickers, close it
       if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target)) {
         setShowEmojiPicker(false);
       }
@@ -28,7 +28,7 @@ function CreatePost({ onPostCreated }) {
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside); //remove unnecessary event listeners
     };
   }, []);
 

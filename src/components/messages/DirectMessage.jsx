@@ -1,11 +1,40 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import './DirectMessage.css';
 
-function DirectMessage({ recipient, onClose, onConversationCreated }) {
+function DirectMessage({ recipient, onClose, onMessageSent }) {
   const [message, setMessage] = useState('');
+  const [messages, setMessages] = useState([]);
   const [sending, setSending] = useState(false);
+  const messagesEndRef = useRef(null);
   const currentUserId = localStorage.getItem('userId');
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  // Fetch existing messages when component mounts
+  useEffect(() => {
+    const fetchMessages = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/api/messages/conversation?user1=${currentUserId}&user2=${recipient._id}`);
+        setMessages(response.data);
+        scrollToBottom();
+      } catch (err) {
+        // It's okay if there are no messages yet
+        if (err.response?.status !== 404) {
+          console.error('Error fetching messages:', err);
+        }
+      }
+    };
+    
+    fetchMessages();
+  }, [currentUserId, recipient._id]);
+
+  // Scroll to bottom whenever messages change
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -13,26 +42,23 @@ function DirectMessage({ recipient, onClose, onConversationCreated }) {
 
     setSending(true);
     try {
-      // First create a new conversation
-      const conversationResponse = await axios.post('http://localhost:3000/api/conversations', {
-        participants: [currentUserId, recipient._id]
-      });
-
-      // Then send the first message
-      await axios.post('http://localhost:3000/api/messages', {
-        conversationId: conversationResponse.data._id,
+      // Send the message directly
+      const response = await axios.post('http://localhost:3000/api/messages', {
         sender: currentUserId,
-        content: message
+        recipient: recipient._id,
+        content: message.trim()
       });
 
-      // Get the updated conversation with the message
-      const updatedConversation = await axios.get(`http://localhost:3000/api/conversations/${conversationResponse.data._id}`);
-
-      // Notify parent components
-      onConversationCreated(updatedConversation.data);
-      onClose();
+      // Add new message to the messages array
+      setMessages(prev => [...prev, response.data]);
+      
+      // Clear input and notify parent
+      setMessage('');
+      if (onMessageSent) {
+        onMessageSent(response.data);
+      }
     } catch (err) {
-      console.error('Error creating conversation:', err);
+      console.error('Error sending message:', err);
     } finally {
       setSending(false);
     }
@@ -54,9 +80,23 @@ function DirectMessage({ recipient, onClose, onConversationCreated }) {
       </div>
 
       <div className="direct-message-content">
-        <p className="start-message">
-          Start a conversation with {recipient.name.display}
-        </p>
+        <div className="messages-container">
+          {messages.length === 0 ? (
+            <p className="start-message">
+              Start a conversation with {recipient.name.display}
+            </p>
+          ) : (
+            messages.map(msg => (
+              <div 
+                key={msg._id}
+                className={`message ${msg.sender._id === currentUserId ? 'sent' : 'received'}`}
+              >
+                {msg.content}
+              </div>
+            ))
+          )}
+          <div ref={messagesEndRef} />
+        </div>
       </div>
 
       <form onSubmit={handleSendMessage} className="message-input">
@@ -64,7 +104,7 @@ function DirectMessage({ recipient, onClose, onConversationCreated }) {
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          placeholder="Type your first message..."
+          placeholder="Type your message..."
           disabled={sending}
         />
         <button type="submit" disabled={sending || !message.trim()}>
