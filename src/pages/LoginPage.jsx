@@ -13,7 +13,7 @@ function LoginPage() {
       const user = localStorage.getItem('userId')
       const response = await axios.get(`http://localhost:3000/api/users/${user}/login`);
       console.log('Login data:', response.data);
-      return await response.data;
+      return response.data;
     } catch (err) {
       console.error('Error fetching login:', err);
     }

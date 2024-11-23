@@ -18,6 +18,8 @@ function FeedPage() {
     // Check if user is logged in
     const userId = localStorage.getItem('userId');
     const loginID = localStorage.getItem('loginId');
+
+    console.log(userId, loginID);
     const userEmail = localStorage.getItem('userEmail');
     if (!userId || !loginID || !userEmail) return navigate('/login');
   
@@ -44,6 +46,7 @@ function FeedPage() {
   if (loading) {
     return <div className="loading">Loading...</div>;
   }
+  
 
   if (error) {
     return <div className="error">{error}</div>;

@@ -20,7 +20,7 @@ function ProfileCard() {
         const response = await axios.get(`http://localhost:3000/api/users/${currentUser}`);
 
         console.log('Raw response:', response);
-        
+        console.log('User data:', response.data);
         if (response.status !== 200) {
           throw new Error(`Server returned status ${response.status}`);
         }
