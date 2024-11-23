@@ -1,11 +1,32 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo, useCallback } from 'react';
 import axios from 'axios';
 import './Post.css';
+
+// Move format functions outside component to prevent recreation
+const formatDate = (dateString) => {
+  const options = {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  };
+  return new Date(dateString).toLocaleDateString('en-US', options);
+};
+
+const formatTime = (dateString) => {
+  const options = {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true
+  };
+  return new Date(dateString).toLocaleTimeString('en-US', options);
+};
 
 function Post({ post, onPostUpdated }) {
   const [userDetails, setUserDetails] = useState(null);
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchUserDetails = async () => {
       try {
         // First get the post details
@@ -14,43 +35,27 @@ function Post({ post, onPostUpdated }) {
         
         // Then fetch the user details using the user ID from the post
         const userResponse = await axios.get(`http://localhost:3000/api/users/${postWithUser.user}`);
-        console.log('User details:', userResponse.data);
         
-        setUserDetails(userResponse.data);
+        if (isMounted) {
+          setUserDetails(userResponse.data);
+        }
       } catch (err) {
         console.error('Error fetching user details:', err);
       }
     };
 
     fetchUserDetails();
+    return () => { isMounted = false; };
   }, [post._id]);
 
-  const handleLike = async () => {
+  const handleLike = useCallback(async () => {
     try {
       await axios.post(`http://localhost:3000/api/posts/${post._id}/like`);
       onPostUpdated(); // Notify parent to refresh posts
     } catch (err) {
       console.error('Error liking post:', err);
     }
-  };
-
-  const formatDate = (dateString) => {
-    const options = {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    };
-    return new Date(dateString).toLocaleDateString('en-US', options);
-  };
-
-  const formatTime = (dateString) => {
-    const options = {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true
-    };
-    return new Date(dateString).toLocaleTimeString('en-US', options);
-  };
+  }, [post._id, onPostUpdated]);
 
   return (
     <div className="post-card">
@@ -67,13 +72,13 @@ function Post({ post, onPostUpdated }) {
       </div>
       <div className="post-content">
         <p>{post.content}</p>
-        {post.mediaUrls && post.mediaUrls.length > 0 && ( // post any media if it exists
+        {post.mediaUrls && post.mediaUrls.length > 0 && (
           <div className="post-media">
             {post.mediaUrls.map((url, index) => (
               <div key={index} className="media-container">
-                {url.startsWith('data:image') ? ( // if the URL starts with 'data:image', it's an image
+                {url.startsWith('data:image') ? (
                   <img src={url} alt={`Post media ${index + 1}`} />
-                ) : url.startsWith('data:video') ? ( // if the URL starts with 'data:video', it's a video
+                ) : url.startsWith('data:video') ? (
                   <video src={url} controls />
                 ) : null}
               </div>
@@ -92,4 +97,5 @@ function Post({ post, onPostUpdated }) {
   );
 }
 
-export default Post;
+const MemoizedPost = memo(Post);
+export default MemoizedPost;

@@ -16,8 +16,9 @@
 }
 
 .profile-pic {
-  width: 80px;
-  height: 80px;
+  width: 150px; 
+  /*80px*/
+  height: 150px;
   border-radius: 50%;
   margin-top: -40px;
   border: 4px solid var(--card-bg);
