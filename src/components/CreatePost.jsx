@@ -17,12 +17,9 @@ function CreatePost({ onPostCreated }) {
   const videoInputRef = useRef(null);
 
   useEffect(() => {
-    const handleClickOutside = (event) => { //if user clicks outside of the pickers, close it
+    const handleClickOutside = (event) => {
       if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target)) {
         setShowEmojiPicker(false);
-      }
-      if (gifPickerRef.current && !gifPickerRef.current.contains(event.target)) {
-        setShowGifPicker(false);
       }
     };
 
@@ -156,7 +153,6 @@ function CreatePost({ onPostCreated }) {
       url: gifUrl
     };
     setMediaList(prev => [...prev, newMedia]);
-    setShowGifPicker(false);
   }, []);
 
   return (

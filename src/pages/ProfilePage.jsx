@@ -32,6 +32,7 @@ function ProfilePage() {
       // Then fetch posts using the profile owner's ID, not the current user's ID
       const postsResponse = await axios.get(`http://localhost:3000/api/posts/user/${userData._id}`);
 
+      console.log('Posts:', postsResponse.data);
       if (!controller.signal.aborted) {
         setUser(userData);
         setIsOwnProfile(currentUserId === userData._id);

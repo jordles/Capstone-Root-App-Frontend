@@ -55,8 +55,7 @@ function GifPicker({ onGifSelect, onClose, isOpen }) {
 
   const handleGifSelect = useCallback((gif) => {
     onGifSelect(gif.media_formats.gif.url);
-    onClose();
-  }, [onGifSelect, onClose]);
+  }, [onGifSelect]);
 
   useEffect(() => {
     if (searchTerm) {

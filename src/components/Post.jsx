@@ -24,7 +24,7 @@ const formatTime = (dateString) => {
   return new Date(dateString).toLocaleTimeString('en-US', options);
 };
 
-function Post({ post, onPostUpdated }) {
+function Post({ post, onPostUpdated, onPostDeleted }) {
   const [userDetails, setUserDetails] = useState(null);
   const [showOptions, setShowOptions] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -83,7 +83,7 @@ function Post({ post, onPostUpdated }) {
     try {
       const response = await axios.delete(`http://localhost:3000/api/posts/${post._id}`);
       if (response.status === 200) {
-        onPostUpdated(null); // null indicates post was deleted
+        onPostDeleted(post._id);
       }
     } catch (error) {
       console.error('Error deleting post:', error);

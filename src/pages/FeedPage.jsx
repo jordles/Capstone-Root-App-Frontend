@@ -43,6 +43,19 @@ function FeedPage() {
     setPosts(prevPosts => [newPost, ...prevPosts]);
   };
 
+  const handlePostUpdate = (updatedPost) => {
+    if (!updatedPost) return; // Skip if no post provided
+    setPosts(prevPosts => 
+      prevPosts.map(post => 
+        post._id === updatedPost._id ? updatedPost : post
+      )
+    );
+  };
+
+  const handlePostDelete = (postId) => {
+    setPosts(prevPosts => prevPosts.filter(post => post._id !== postId));
+  };
+
   if (loading) {
     return <div className="loading">Loading...</div>;
   }
@@ -68,7 +81,8 @@ function FeedPage() {
               <Post 
                 key={post._id} 
                 post={post} 
-                onPostUpdated={fetchPosts}
+                onPostUpdated={handlePostUpdate}
+                onPostDeleted={handlePostDelete}
               />
             ))
           )}
