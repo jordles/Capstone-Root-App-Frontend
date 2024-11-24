@@ -1,4 +1,4 @@
-.post-button, .highlight-button {
+.post-button, .highlight-button, .delete-button, .root-logo {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -14,12 +14,16 @@
   transform: scale(0.9);
 }
 
-.post-button:hover, .highlight-button:hover {
+.post-button:hover, .highlight-button:hover, .delete-button:hover, .root-logo:hover {
   
   color: var(--primary);
   transform: scale(1);
 }
 
+.root-logo{
+  color: var(--primary);
+  background-color: var(--highlight);
+}
 .delete-button:hover span{
   color: #952b01 !important;
 }

@@ -64,11 +64,11 @@
 }
 
 /* Responsive Design */
-@media (max-width: 1280px){
+/* @media (max-width: 1280px){
   .feed-container {
     padding: 0 20px;
   }
-}
+} */
 
 
 @media (max-width: 1024px) {
