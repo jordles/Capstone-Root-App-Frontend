@@ -1,4 +1,4 @@
-.post-button {
+.post-button, .highlight-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -14,10 +14,22 @@
   transform: scale(0.9);
 }
 
-.post-button:hover {
-  background: rgba(255, 255, 255, 0.1);
+.post-button:hover, .highlight-button:hover {
+  
   color: var(--primary);
   transform: scale(1);
+}
+
+.delete-button:hover span{
+  color: #952b01 !important;
+}
+
+.highlight-button:hover span{
+  color: var(--primary) !important;
+}
+
+.post-button:hover{
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .post-button:disabled {
@@ -26,7 +38,7 @@
   transform: none;
 }
 
-.post-button .material-symbols-rounded {
+.post-button .material-symbols-rounded, .highlight-button .material-symbols-rounded {
   font-size: 28px;
   width: 28px;
   height: 28px;
@@ -34,3 +46,5 @@
   align-items: center;
   justify-content: center;
 }
+
+

@@ -1,6 +1,9 @@
-import { useState, useEffect, memo, useCallback } from 'react';
+import { useState, useEffect, memo, useCallback, useRef } from 'react';
 import axios from 'axios';
 import './Post.css';
+import PostButton from './PostButton';
+import OptionsPicker from './OptionsPicker';
+import EditPost from './EditPost';
 
 // Move format functions outside component to prevent recreation
 const formatDate = (dateString) => {
@@ -23,6 +26,9 @@ const formatTime = (dateString) => {
 
 function Post({ post, onPostUpdated }) {
   const [userDetails, setUserDetails] = useState(null);
+  const [showOptions, setShowOptions] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const optionsRef = useRef(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -48,6 +54,22 @@ function Post({ post, onPostUpdated }) {
     return () => { isMounted = false; };
   }, [post._id]);
 
+  useEffect(() => {
+    let isMounted = true;
+
+    const handleClickOutside = (event) => {
+      if (optionsRef.current && !optionsRef.current.contains(event.target)) {
+        setShowOptions(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      isMounted = false;
+    };
+  }, []);
+
   const handleLike = useCallback(async () => {
     try {
       await axios.post(`http://localhost:3000/api/posts/${post._id}/like`);
@@ -56,6 +78,18 @@ function Post({ post, onPostUpdated }) {
       console.error('Error liking post:', err);
     }
   }, [post._id, onPostUpdated]);
+
+  const handleDelete = async () => {
+    try {
+      const response = await axios.delete(`http://localhost:3000/api/posts/${post._id}`);
+      if (response.status === 200) {
+        onPostUpdated(null); // null indicates post was deleted
+      }
+    } catch (error) {
+      console.error('Error deleting post:', error);
+    }
+    setShowOptions(false);
+  };
 
   return (
     <div className="post-card">
@@ -69,6 +103,26 @@ function Post({ post, onPostUpdated }) {
           <span className="post-date">{formatDate(post.createdAt)}</span>
           <span className="post-time">{formatTime(post.createdAt)}</span>
         </div>
+        <div className="options-picker-container" ref={optionsRef}>
+          <PostButton
+            icon="more_vert"
+            label="options"
+            className="highlight-button"
+            onClick={() => setShowOptions(!showOptions)}
+          />
+          {showOptions && (
+            <div className="options-picker-popup">
+              <OptionsPicker 
+                onEdit={() => {
+                  setShowEditModal(true);
+                  setShowOptions(false);
+                }}
+                onDelete={handleDelete}
+              />
+            </div>
+          )}
+        </div>
+        
       </div>
       <div className="post-content">
         <p>{post.content}</p>
@@ -87,12 +141,20 @@ function Post({ post, onPostUpdated }) {
         )}
       </div>
       <div className="post-actions">
-      <button onClick={handleLike}>
-          🤍 {post.likes?.length || 0}
+        <button onClick={handleLike}>
+            🤍 {post.likes?.length || 0}
         </button>
         <button>💬 Comment</button>
         <button>🔄 Share</button>
       </div>
+      
+      {showEditModal && (
+        <EditPost
+          post={post}
+          onClose={() => setShowEditModal(false)}
+          onPostUpdated={onPostUpdated}
+        />
+      )}
     </div>
   );
 }

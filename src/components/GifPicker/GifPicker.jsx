@@ -60,12 +60,26 @@ function GifPicker({ onGifSelect, onClose, isOpen }) {
 
   useEffect(() => {
     if (searchTerm) {
+      if (showFavorites) {
+        // Don't make API call when searching favorites
+        return;
+      }
       const debounceTimeout = setTimeout(() => {
         searchGifs(searchTerm);
       }, 300);
       return () => clearTimeout(debounceTimeout);
     }
-  }, [searchTerm, searchGifs]);
+  }, [searchTerm, searchGifs, showFavorites]);
+
+  const filteredGifs = showFavorites 
+    ? favorites.filter(gif => {
+        const searchLower = searchTerm.toLowerCase();
+        // Search through all available properties
+        return  gif.content_description?.toLowerCase().includes(searchLower) ||
+                gif.tags?.some(tag => tag.toLowerCase().includes(searchLower)) ||
+                gif.itemurl?.toLowerCase().includes(searchLower);
+      })
+    : gifs;
 
   if (!isOpen) return null;
 
@@ -74,16 +88,21 @@ function GifPicker({ onGifSelect, onClose, isOpen }) {
       <SearchBar 
         value={searchTerm}
         onChange={setSearchTerm}
-        onToggleFavorites={() => setShowFavorites(prev => !prev)}
+        onToggleFavorites={() => {
+          setShowFavorites(prev => !prev);
+          setSearchTerm(''); // Clear search when toggling
+        }}
         showFavorites={showFavorites}
       />
       
       <GifGrid 
-        gifs={showFavorites ? favorites : gifs}
+        //gifs={showFavorites ? favorites : gifs}
+        gifs={filteredGifs}
         favorites={favorites}
         onGifSelect={handleGifSelect}
         onToggleFavorite={toggleFavorite}
-        isLoading={isLoading}
+        isLoading={isLoading && !showFavorites}
+        //isLoading={isLoading}
       />
     </div>
   );

@@ -12,7 +12,7 @@ function CreatePost({ onPostCreated }) {
   const [showGifPicker, setShowGifPicker] = useState(false);
   const [mediaList, setMediaList] = useState([]);
   const emojiPickerRef = useRef(null); //reference our dom elements
-  const gifPickerRef = useRef(null);
+  const gifPickerRef = useRef(null); // reference when we want to close the gif picker for example. 
   const imageInputRef = useRef(null);
   const videoInputRef = useRef(null);
 
@@ -249,7 +249,7 @@ function CreatePost({ onPostCreated }) {
             icon="send"
             label="Post"
             type="submit"
-            disabled={!newPost.trim()}
+            disabled={!newPost.trim() && mediaList.length === 0}
           />
         </div>
       </form>

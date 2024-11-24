@@ -1,3 +1,4 @@
+import GoogleIcon from './GoogleIcon';
 import './PostButton.css';
 
 function PostButton({ icon, label, onClick, type = 'button', disabled = false, className = 'post-button' }) {
@@ -9,7 +10,7 @@ function PostButton({ icon, label, onClick, type = 'button', disabled = false, c
       disabled={disabled}
       title={label}
     >
-      <span className="material-symbols-rounded">{icon}</span>
+      <GoogleIcon icon={icon} />
     </button>
   );
 }
