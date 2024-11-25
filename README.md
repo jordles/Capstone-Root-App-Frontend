@@ -43,11 +43,10 @@ This is a simple wireframe of the early stages of my feed/landing page.
 
 | (19%) Server | Weight | Finished |
 | :-- | :--: | :--: |
-| Create a RESTful API using Node and Express. <br><br>
-* For the purposes of this project, you may forgo the HATEOAS aspect of REST APIs. | 7% | ✅ |
+| Create a RESTful API using Node and Express. <br><br> * For the purposes of this project, you may forgo the HATEOAS aspect of REST APIs. | 7% | ✅ |
 | Include API routes for all four CRUD operations. | 5% | ✅ |
 | Utilize the native MongoDB driver or Mongoose to interface with your database. | 5% | ✅ |
-~~| Include at least one form of user authentication/authorization within the application. (NOT GRADED ON) | 2% |  |~~
+| ~~Include at least one form of user authentication/authorization within the application.~~ (NOT GRADED ON) | 2% |  |
 
 | (35%) Front-End Development | Weight | Finished |
 | :-- | :--: | :--: |
@@ -60,10 +59,9 @@ This is a simple wireframe of the early stages of my feed/landing page.
 
 
 ## Extra Libraries / Packages
-moment-timezone - for timezone conversion from UTC recorded on mongoose data, regarding posts and messaging times  
+
 emoji-picker-react - for emoji picker on posts and messages    
-memo - for preventing unnecessary re-renders when react re-renders media preview because of CreatePost parent re-renders  
-** useRef: "Keep this value the same between renders" vs memo: "Don't render at all if nothing changed" **  
+memo - for preventing unnecessary re-renders when react re-renders media preview because of CreatePost parent re-renders  (The difference between these two is that : useRef=> "Keep this value the same between renders" vs memo => "Don't render at all if nothing changed"  )
   
 ## API (Third Party)
 [tenor](https://tenor.com/gifapi)- incorporated gif images into my messages and post functionalities
