@@ -3,7 +3,7 @@ This is a mockup of a social media application that allows users to post content
 
 This is a simple wireframe of the early stages of my feed/landing page. 
 
-
+![](https://raw.githubusercontent.com/jordles/Capstone-Root-App-Frontend/refs/heads/main/images/root-wireframe.svg)
 
 ## Sites
 [Backend](https://github.com/jordles/Capstone-Root-App-Backend)
