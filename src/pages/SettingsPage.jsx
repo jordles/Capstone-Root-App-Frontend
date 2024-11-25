@@ -1,22 +1,23 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './SettingsPage.css';
+import { AuthContext } from '../App';
 
 function SettingsPage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [message, setMessage] = useState('');
+  const { setUserHandle } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     displayName: '',
-    handle: '',
+    handleName: '',
+    username: '',
     email: '',
     bio: '',
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: ''
   });
 
   useEffect(() => {
@@ -28,20 +29,24 @@ function SettingsPage() {
           return;
         }
 
-        const response = await axios.get(`http://localhost:3000/api/users/${userId}`);
-        const userData = response.data;
+        const user = await axios.get(`http://localhost:3000/api/users/${userId}`);
+        const userData = user.data;
+        console.log('User data:', userData);
+
+        const login = await axios.get(`http://localhost:3000/api/users/${userId}/login`);
+        const loginData = login.data;
+        console.log('Login data:', loginData);
 
         setFormData({
           firstName: userData.name.first || '',
           lastName: userData.name.last || '',
           displayName: userData.name.display || '',
-          handle: userData.name.handle || '',
+          handleName: userData.name.handle || '',
+          username: loginData.username || '',
           email: userData.email || '',
           bio: userData.bio || '',
-          currentPassword: '',
-          newPassword: '',
-          confirmPassword: ''
         });
+        
       } catch (err) {
         setError(err.message);
       } finally {
@@ -52,186 +57,150 @@ function SettingsPage() {
     fetchUserData();
   }, [navigate]);
 
-  const handleChange = (e) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
+    setFormData(prevData => ({
+      ...prevData,
       [name]: value
     }));
   };
 
+  const handlePasswordReset = async (e) => {
+    e.preventDefault();
+    setMessage('');
+    setError('');
+    
+    try {
+      const response = await axios.post('http://localhost:3000/api/users/forgot-password', { 
+        email: formData.email 
+      });
+      setMessage('Password reset link has been sent to your email.');
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to send reset email');
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
+    setError('');
+    setMessage('');
 
     try {
       const userId = localStorage.getItem('userId');
-      
-      // Validate passwords if changing
-      if (formData.newPassword) {
-        if (formData.newPassword !== formData.confirmPassword) {
-          setError("New passwords don't match");
-          return;
-        }
-        if (!formData.currentPassword) {
-          setError("Current password is required to set new password");
-          return;
-        }
+      if (!userId) {
+        navigate('/login');
+        return;
       }
 
-      // Prepare update data
-      const updateData = {
+      const response = await axios.patch(`http://localhost:3000/api/users/settings/${userId}`, {
         name: {
           first: formData.firstName,
           last: formData.lastName,
           display: formData.displayName,
-          handle: formData.handle
+          handle: formData.handleName
         },
         email: formData.email,
-        bio: formData.bio
-      };
+        bio: formData.bio,
+      });
 
-      // If changing password, include password data
-      if (formData.newPassword) {
-        updateData.currentPassword = formData.currentPassword;
-        updateData.newPassword = formData.newPassword;
-      }
+      const login = await axios.get(`http://localhost:3000/api/users/${userId}/login`);
+      const loginData = login.data;
+      const response2 = await axios.patch(`http://localhost:3000/api/logins/${loginData._id}`, {
+        username: formData.username,
+        email: formData.email
+      });
 
-      await axios.patch(`http://localhost:3000/api/users/settings/${userId}`, updateData);
+      // Update the global handle state
+      setUserHandle(formData.handleName);
       
-      // Redirect to profile page
-      navigate(`/profile/${formData.handle}`);
+      setMessage('Profile updated successfully!');
     } catch (err) {
-      setError(err.response?.data?.error || err.message);
+      setError(err.response?.data?.error || err.response2?.data?.error || 'Failed to update profile');
     }
   };
 
-  if (loading) return <div className="settings-page loading">Loading...</div>;
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="settings-page">
-      <div className="settings-container">
-        <h1>Edit Profile</h1>
-        {error && <div className="error-message">{error}</div>}
-        
-        <form onSubmit={handleSubmit}>
-          <div className="form-section">
-            <h2>Basic Information</h2>
-            <div className="form-group">
-              <label htmlFor="firstName">First Name</label>
-              <input
-                type="text"
-                id="firstName"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-              />
-            </div>
+      <h2>Settings</h2>
+      {message && <div className="success-message" style={{ color: 'green', marginBottom: '1rem' }}>{message}</div>}
+      {error && <div className="error" style={{ color: 'red', marginBottom: '1rem' }}>{error}</div>}
+      
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>First Name:</label>
+          <input
+            type="text"
+            name="firstName"
+            value={formData.firstName}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div>
+          <label>Last Name:</label>
+          <input
+            type="text"
+            name="lastName"
+            value={formData.lastName}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div>
+          <label>Display Name:</label>
+          <input
+            type="text"
+            name="displayName"
+            value={formData.displayName}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div>
+          <label>Handle:</label>
+          <input
+            type="text"
+            name="handleName"
+            value={formData.handleName}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div>
+          <label>Username:</label>
+          <input
+            type="text"
+            name="username"
+            value={formData.username}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div>
+          <label>Email:</label>
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+        <div>
+          <label>Bio:</label>
+          <textarea
+            name="bio"
+            value={formData.bio}
+            onChange={handleInputChange}
+          />
+        </div>
+        <button type="submit">Save Changes</button>
+      </form>
 
-            <div className="form-group">
-              <label htmlFor="lastName">Last Name</label>
-              <input
-                type="text"
-                id="lastName"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="displayName">Display Name</label>
-              <input
-                type="text"
-                id="displayName"
-                name="displayName"
-                value={formData.displayName}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="handle">Username</label>
-              <input
-                type="text"
-                id="handle"
-                name="handle"
-                value={formData.handle}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="bio">Bio</label>
-              <textarea
-                id="bio"
-                name="bio"
-                value={formData.bio}
-                onChange={handleChange}
-                rows="4"
-              />
-            </div>
-          </div>
-
-          <div className="form-section">
-            <h2>Change Password</h2>
-            <div className="form-group">
-              <label htmlFor="currentPassword">Current Password</label>
-              <input
-                type="password"
-                id="currentPassword"
-                name="currentPassword"
-                value={formData.currentPassword}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="newPassword">New Password</label>
-              <input
-                type="password"
-                id="newPassword"
-                name="newPassword"
-                value={formData.newPassword}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="confirmPassword">Confirm New Password</label>
-              <input
-                type="password"
-                id="confirmPassword"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-
-          <div className="form-actions">
-            <button type="button" className="cancel-btn" onClick={() => navigate(-1)}>
-              Cancel
-            </button>
-            <button type="submit" className="save-btn">
-              Save Changes
-            </button>
-          </div>
-        </form>
+      <div className="password-reset-section">
+        <h3>Change Password</h3>
+        <p>To change your password, click the button below to receive a password reset link in your email.</p>
+        <button onClick={handlePasswordReset}>Send Password Reset Link</button>
       </div>
     </div>
   );

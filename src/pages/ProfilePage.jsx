@@ -64,8 +64,10 @@ function ProfilePage() {
   const handleDeleteAccount = useCallback(async () => {
     if (window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
       try {
-        await axios.delete(`http://localhost:3000/api/users/${user._id}`);
+        await axios.delete(`http://localhost:3000/api/logins/${user._id}`);
         localStorage.removeItem('userId');
+        localStorage.removeItem('loginId');
+        localStorage.removeItem('userEmail');
         navigate('/login');
       } catch (err) {
         console.error('Error deleting account:', err);

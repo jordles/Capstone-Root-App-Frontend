@@ -16,6 +16,22 @@
   font-weight: bolder;
 }
 
-.navbar a:hover {
+.navbar a:hover, .navbar .logout-button:hover{ 
   color: var(--text-light);
+}
+
+.nav-links{
+  gap: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.navbar .logout-button{
+  color: white;
+  background: #902302;
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-weight: bolder;
 }

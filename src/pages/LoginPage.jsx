@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import { AuthContext } from '../App';
 
 function LoginPage() {
   const [userEmail, setUserEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { setIsAuthenticated, setUserId, setUserHandle } = useContext(AuthContext);
 
   const grabLogin = async () => {
     try {
@@ -31,8 +33,6 @@ function LoginPage() {
       });
       console.log('Server response:', response.data);
       
-      
-
       if (response.data) {
         // Store user data in localStorage
         localStorage.setItem('userId', response.data.user); // _id for the user database
@@ -40,6 +40,15 @@ function LoginPage() {
         const login = await grabLogin();
         localStorage.setItem('loginId', login._id); // _id for the login database
         localStorage.setItem('userEmail', login.email); 
+
+        // Get user data to update handle
+        const userData = await axios.get(`http://localhost:3000/api/users/${response.data.user}`);
+        
+        // Update auth context
+        setIsAuthenticated(true);
+        setUserId(response.data.user);
+        setUserHandle(userData.data.name.handle);
+
         console.log('Login successful');
         navigate('/feed');
       }
@@ -76,6 +85,9 @@ function LoginPage() {
       </form>
       <div style={{ marginTop: '1rem' }}>
         <Link to="/forgot-password">Forgot Password?</Link>
+      </div>
+      <div>
+        <Link to="/register">Don't have an account? Sign up</Link>
       </div>
     </div>
   );

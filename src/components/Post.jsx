@@ -26,6 +26,7 @@ const formatTime = (dateString) => {
 
 function Post({ post, onPostUpdated, onPostDeleted }) {
   const [userDetails, setUserDetails] = useState(null);
+  const [isDeleted, setIsDeleted] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const optionsRef = useRef(null);
@@ -43,10 +44,16 @@ function Post({ post, onPostUpdated, onPostDeleted }) {
         const userResponse = await axios.get(`http://localhost:3000/api/users/${postWithUser.user}`);
         
         if (isMounted) {
-          setUserDetails(userResponse.data);
+          if (!userResponse.data) {
+            setIsDeleted(true);
+          } else {
+            setUserDetails(userResponse.data);
+            setIsDeleted(false);
+          }
         }
       } catch (err) {
-        console.error('Error fetching user details:', err);
+        console.error('Error fetching details:', err);
+        // Don't set isDeleted here since we want to preserve loading state for other errors
       }
     };
 
@@ -83,8 +90,13 @@ function Post({ post, onPostUpdated, onPostDeleted }) {
     try {
       const response = await axios.delete(`http://localhost:3000/api/posts/${post._id}`);
       if (response.status === 200) {
-        onPostDeleted(post._id);
+        onPostDeleted(post._id); // Notify parent to refresh posts
       }
+
+      // const user = await axios.get(`http://localhost:3000/api/users/${post.user}`);
+      // user.posts.pull(post._id);
+      // user.save();
+      // logic done in the backend already. No need to do it here
     } catch (error) {
       console.error('Error deleting post:', error);
     }
@@ -96,8 +108,8 @@ function Post({ post, onPostUpdated, onPostDeleted }) {
       <div className="post-header">
         <img src="https://via.placeholder.com/50" alt="Author" />
         <div className="post-author">
-          <h4>{userDetails ? userDetails.name.display : 'loading...'}</h4>
-          <span>@{userDetails ? userDetails.name.handle : 'loading...'}</span>
+          <h4>{isDeleted ? 'Deleted User' : (userDetails ? userDetails.name.display : 'loading...')}</h4>
+          <span>@{isDeleted ? 'deleted' : (userDetails ? userDetails.name.handle : 'loading...')}</span>
         </div>
         <div className="post-timestamp">
           <span className="post-date">{formatDate(post.createdAt)}</span>
