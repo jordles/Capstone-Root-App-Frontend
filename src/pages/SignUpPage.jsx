@@ -48,7 +48,7 @@ function SignUpPage(){
         requestBody["name.last"] = nameLast;
       }
 
-      const response = await axios.post('http://localhost:3000/api/users/register', requestBody);
+      const response = await axios.post('https://capstone-root-app-backend.onrender.com/api/users/register', requestBody);
       
       console.log('Server response:', response.data);
       // Redirect to login page after successful registration

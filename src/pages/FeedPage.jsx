@@ -29,7 +29,7 @@ function FeedPage() {
   const fetchPosts = async () => { //just grabbing all the posts from the database
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:3000/api/posts/feed');
+      const response = await axios.get('https://capstone-root-app-backend.onrender.com/api/posts/feed');
       setPosts(response.data);
     } catch (err) {
       setError('Failed to load posts. Please try again later.');

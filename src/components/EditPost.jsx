@@ -49,7 +49,7 @@ function EditPost({ post, onClose, onPostUpdated }) {
     if (!editedPost.trim() && mediaList.length === 0) return;
     
     try {
-      const response = await axios.patch(`http://localhost:3000/api/posts/${post._id}`, {
+      const response = await axios.patch(`https://capstone-root-app-backend.onrender.com/api/posts/${post._id}`, {
         content: editedPost,
         mediaUrls: mediaList.map(media => media.url)
       });

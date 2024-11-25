@@ -18,7 +18,7 @@ function FriendSuggestions() {
         setCurrentUser(user);
 
         // Fetch users that the current user is not following
-        const response = await axios.get(`http://localhost:3000/api/users/suggestions/${user}`);
+        const response = await axios.get(`https://capstone-root-app-backend.onrender.com/api/users/suggestions/${user}`);
         setSuggestions(response.data);
       } catch (error) {
         console.error('Error fetching suggestions:', error);
@@ -32,7 +32,7 @@ function FriendSuggestions() {
 
   const handleFollow = async (userId) => {
     try {
-      await axios.post(`http://localhost:3000/api/users/${currentUser}/follow`, {
+      await axios.post(`https://capstone-root-app-backend.onrender.com/api/users/${currentUser}/follow`, {
         userToFollowId: userId
       });
       

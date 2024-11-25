@@ -14,7 +14,7 @@ function ForgotPasswordPage() {
     setError('');
     
     try {
-      const response = await axios.post('http://localhost:3000/api/users/forgot-password', { email });
+      const response = await axios.post('https://capstone-root-app-backend.onrender.com/api/users/forgot-password', { email });
       setMessage(response.data.message);
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to send reset email');

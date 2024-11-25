@@ -26,12 +26,12 @@ function ProfilePage() {
       const currentUserId = localStorage.getItem('userId');
       
       // Fetch user data first to get their ID
-      const userResponse = await axios.get(`http://localhost:3000/api/users/profile/${handle}`);
+      const userResponse = await axios.get(`https://capstone-root-app-backend.onrender.com/api/users/profile/${handle}`);
 
       const userData = userResponse.data;
 
       // Then fetch posts using the profile owner's ID, not the current user's ID
-      const postsResponse = await axios.get(`http://localhost:3000/api/posts/user/${userData._id}`);
+      const postsResponse = await axios.get(`https://capstone-root-app-backend.onrender.com/api/posts/user/${userData._id}`);
 
       console.log('Posts:', postsResponse.data);
       if (!controller.signal.aborted) {
@@ -65,7 +65,7 @@ function ProfilePage() {
   const handleDeleteAccount = useCallback(async () => {
     if (window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
       try {
-        await axios.delete(`http://localhost:3000/api/logins/${user._id}`);
+        await axios.delete(`https://capstone-root-app-backend.onrender.com/api/logins/${user._id}`);
         localStorage.removeItem('userId');
         localStorage.removeItem('loginId');
         localStorage.removeItem('userEmail');

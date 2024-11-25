@@ -29,11 +29,11 @@ function SettingsPage() {
           return;
         }
 
-        const user = await axios.get(`http://localhost:3000/api/users/${userId}`);
+        const user = await axios.get(`https://capstone-root-app-backend.onrender.com/api/users/${userId}`);
         const userData = user.data;
         console.log('User data:', userData);
 
-        const login = await axios.get(`http://localhost:3000/api/users/${userId}/login`);
+        const login = await axios.get(`https://capstone-root-app-backend.onrender.com/api/users/${userId}/login`);
         const loginData = login.data;
         console.log('Login data:', loginData);
 
@@ -71,7 +71,7 @@ function SettingsPage() {
     setError('');
     
     try {
-      const response = await axios.post('http://localhost:3000/api/users/forgot-password', { 
+      const response = await axios.post('https://capstone-root-app-backend.onrender.com/api/users/forgot-password', { 
         email: formData.email 
       });
       setMessage('Password reset link has been sent to your email.');
@@ -92,7 +92,7 @@ function SettingsPage() {
         return;
       }
 
-      const response = await axios.patch(`http://localhost:3000/api/users/settings/${userId}`, {
+      const response = await axios.patch(`https://capstone-root-app-backend.onrender.com/api/users/settings/${userId}`, {
         name: {
           first: formData.firstName,
           last: formData.lastName,
@@ -103,9 +103,9 @@ function SettingsPage() {
         bio: formData.bio,
       });
 
-      const login = await axios.get(`http://localhost:3000/api/users/${userId}/login`);
+      const login = await axios.get(`https://capstone-root-app-backend.onrender.com/api/users/${userId}/login`);
       const loginData = login.data;
-      const response2 = await axios.patch(`http://localhost:3000/api/logins/${loginData._id}`, {
+      const response2 = await axios.patch(`https://capstone-root-app-backend.onrender.com/api/logins/${loginData._id}`, {
         username: formData.username,
         email: formData.email
       });

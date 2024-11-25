@@ -14,7 +14,7 @@ function LoginPage() {
   const grabLogin = async () => {
     try {
       const user = localStorage.getItem('userId')
-      const response = await axios.get(`http://localhost:3000/api/users/${user}/login`);
+      const response = await axios.get(`https://capstone-root-app-backend.onrender.com/api/users/${user}/login`);
       console.log('Login data:', response.data);
       return response.data;
     } catch (err) {
@@ -28,7 +28,7 @@ function LoginPage() {
     
     try {
       console.log('Attempting login with:', { userEmail, password });
-      const response = await axios.post('http://localhost:3000/api/users/login', {
+      const response = await axios.post('https://capstone-root-app-backend.onrender.com/api/users/login', {
         userEmail,
         password
       });
@@ -43,7 +43,7 @@ function LoginPage() {
         localStorage.setItem('userEmail', login.email); 
 
         // Get user data to update handle
-        const userData = await axios.get(`http://localhost:3000/api/users/${response.data.user}`);
+        const userData = await axios.get(`https://capstone-root-app-backend.onrender.com/api/users/${response.data.user}`);
         
         // Update auth context
         setIsAuthenticated(true);

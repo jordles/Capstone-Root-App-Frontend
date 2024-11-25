@@ -37,11 +37,11 @@ function Post({ post, onPostUpdated, onPostDeleted }) {
     const fetchUserDetails = async () => {
       try {
         // First get the post details
-        const postResponse = await axios.get(`http://localhost:3000/api/posts/id/${post._id}`);
+        const postResponse = await axios.get(`https://capstone-root-app-backend.onrender.com/api/posts/id/${post._id}`);
         const postWithUser = postResponse.data;
         
         // Then fetch the user details using the user ID from the post
-        const userResponse = await axios.get(`http://localhost:3000/api/users/${postWithUser.user}`);
+        const userResponse = await axios.get(`https://capstone-root-app-backend.onrender.com/api/users/${postWithUser.user}`);
         
         if (isMounted) {
           if (!userResponse.data) {
@@ -79,7 +79,7 @@ function Post({ post, onPostUpdated, onPostDeleted }) {
 
   const handleLike = useCallback(async () => {
     try {
-      await axios.post(`http://localhost:3000/api/posts/${post._id}/like`);
+      await axios.post(`https://capstone-root-app-backend.onrender.com/api/posts/${post._id}/like`);
       onPostUpdated(); // Notify parent to refresh posts
     } catch (err) {
       console.error('Error liking post:', err);
@@ -88,12 +88,12 @@ function Post({ post, onPostUpdated, onPostDeleted }) {
 
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(`http://localhost:3000/api/posts/${post._id}`);
+      const response = await axios.delete(`https://capstone-root-app-backend.onrender.com/api/posts/${post._id}`);
       if (response.status === 200) {
         onPostDeleted(post._id); // Notify parent to refresh posts
       }
 
-      // const user = await axios.get(`http://localhost:3000/api/users/${post.user}`);
+      // const user = await axios.get(`https://capstone-root-app-backend.onrender.com/api/users/${post.user}`);
       // user.posts.pull(post._id);
       // user.save();
       // logic done in the backend already. No need to do it here

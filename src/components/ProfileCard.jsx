@@ -18,7 +18,7 @@ function ProfileCard() {
           throw new Error('No user logged in');
         }
 
-        const response = await axios.get(`http://localhost:3000/api/users/${currentUser}`);
+        const response = await axios.get(`https://capstone-root-app-backend.onrender.com/api/users/${currentUser}`);
 
         console.log('Raw response:', response);
         console.log('User data:', response.data);

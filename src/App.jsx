@@ -28,7 +28,7 @@ function App() {
       const storedUserId = localStorage.getItem('userId');
       if (storedUserId) {
         try {
-          const user = await axios.get(`http://localhost:3000/api/users/${storedUserId}`);
+          const user = await axios.get(`https://capstone-root-app-backend.onrender.com/api/users/${storedUserId}`);
           setIsAuthenticated(true);
           setUserId(storedUserId);
           setUserHandle(user.data.name.handle);

@@ -17,15 +17,15 @@ function MessageWidget() {
       
       setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:3000/api/messages/conversations/${currentUserId}`);
+        const response = await axios.get(`https://capstone-root-app-backend.onrender.com/api/messages/conversations/${currentUserId}`);
         const userIds = response.data;
 
         const conversationsData = await Promise.all(
           userIds.map(async (userId) => {
             try {
-              const userResponse = await axios.get(`http://localhost:3000/api/users/${userId}`);
+              const userResponse = await axios.get(`https://capstone-root-app-backend.onrender.com/api/users/${userId}`);
               const messagesResponse = await axios.get(
-                `http://localhost:3000/api/messages/conversation/${currentUserId}/${userId}`
+                `https://capstone-root-app-backend.onrender.com/api/messages/conversation/${currentUserId}/${userId}`
               );
               
               const messages = messagesResponse.data;

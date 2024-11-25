@@ -20,7 +20,7 @@ function ResetPasswordPage() {
     }
 
     try {
-      await axios.post(`http://localhost:3000/api/users/reset-password/${token}`, { password });
+      await axios.post(`https://capstone-root-app-backend.onrender.com/api/users/reset-password/${token}`, { password });
       navigate('/login');
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to reset password');

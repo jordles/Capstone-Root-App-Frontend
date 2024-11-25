@@ -17,7 +17,7 @@ function DirectMessage({ recipient, onClose, onMessageSent }) {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/messages/conversation/${currentUserId}/${recipient._id}`);
+        const response = await axios.get(`https://capstone-root-app-backend.onrender.com/api/messages/conversation/${currentUserId}/${recipient._id}`);
         setMessages([...response.data].reverse()); // Reverse the messages array
         scrollToBottom();
       } catch (err) {
@@ -40,7 +40,7 @@ function DirectMessage({ recipient, onClose, onMessageSent }) {
     setSending(true);
     try {
       // Send the message directly
-      const response = await axios.post('http://localhost:3000/api/messages', {
+      const response = await axios.post('https://capstone-root-app-backend.onrender.com/api/messages', {
         sender: currentUserId,
         recipient: recipient._id,
         content: message.trim()

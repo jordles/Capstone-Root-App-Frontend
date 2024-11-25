@@ -40,7 +40,7 @@ function CreatePost({ onPostCreated }) {
         return;
       }
 
-      const response = await axios.post('http://localhost:3000/api/posts/add', {
+      const response = await axios.post('https://capstone-root-app-backend.onrender.com/api/posts/add', {
         user: userId,
         content: newPost,
         mediaUrls: mediaList.map(media => media.url)
