@@ -6,6 +6,8 @@ This is a simple wireframe of the early stages of my feed/landing page.
 ![](https://raw.githubusercontent.com/jordles/Capstone-Root-App-Frontend/refs/heads/main/images/root-wireframe.svg)
 
 ## Sites
+
+[Demo](https://rootapp.netlify.app/)
 [Backend](https://github.com/jordles/Capstone-Root-App-Backend)
 
 ## Features and Usage
