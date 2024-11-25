@@ -1,0 +1,8 @@
+.profile-info .handle, .handle {
+  color: var(--text-dark);
+  font-style: italic;
+  display: block;
+  text-decoration: none;
+  pointer-events: none;
+}
+

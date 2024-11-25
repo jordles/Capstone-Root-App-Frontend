@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import './Auth.css';
 
 function ResetPasswordPage() {
   const [password, setPassword] = useState('');
@@ -27,30 +28,35 @@ function ResetPasswordPage() {
   };
 
   return (
-    <div className="reset-password-page">
-      <h2>Reset Password</h2>
-      {error && <div className="error" style={{ color: 'red', marginBottom: '1rem' }}>{error}</div>}
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>New Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Confirm Password:</label>
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Reset Password</button>
-      </form>
+    <div className="auth-container">
+      <div className="auth-card">
+        <h2 className="auth-title">Reset Password</h2>
+        {error && <div className="error">{error}</div>}
+        <form onSubmit={handleSubmit} className="auth-form">
+          <div className="form-group">
+            <label>New Password:</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="auth-input"
+            />
+          </div>
+          <div className="form-group">
+            <label>Confirm Password:</label>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              className="auth-input"
+            />
+          </div>
+          <button type="submit" className="auth-button">Reset Password</button>
+          <Link to="/login" className="auth-link">Back to Login</Link>
+        </form>
+      </div>
     </div>
   );
 }

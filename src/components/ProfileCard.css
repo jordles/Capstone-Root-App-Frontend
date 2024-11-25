@@ -26,11 +26,11 @@
 
 .profile-info h3 {
   color: var(--text-light);
-  margin: 10px 0 5px;
+  margin: 10px 0 0 0;
 }
 
 .profile-info p {
-  color: var(--text-dark);
+  color: #fff;
   font-size: 0.9em;
   margin: 0;
 }

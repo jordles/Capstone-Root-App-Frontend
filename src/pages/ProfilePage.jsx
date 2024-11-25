@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ProfilePosts from '../components/profile/ProfilePosts';
 import './ProfilePage.css';
+import ProfileDetails from '../components/ProfileDetails';
 
 function ProfilePage() {
   const { handle } = useParams(); // Get the handle from the URL
@@ -111,7 +112,7 @@ function ProfilePage() {
             </div>
             <div className="profile-details">
               <div className="profile-names">
-              <h1>{user.name.display}</h1>
+                <h1>{user.name.display}</h1>
                 <span className="handle">@{user.name.handle}</span>
               </div>
               <p className="bio">{user.bio || 'No bio available'}</p>

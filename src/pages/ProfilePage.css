@@ -51,10 +51,13 @@
   flex: 1;
 }
 
-.profile-page .profile-details h1 {
-  margin: 0;
-  font-size: 24px;
-  color: var(--text-color);
+.profile-page .profile-names {
+  text-align: left;
+}
+
+.profile-page .profile-names h1 {
+  text-align: left;
+  margin-bottom: 0;
 }
 
 .profile-page .handle {
@@ -64,7 +67,8 @@
 }
 
 .profile-page .bio {
-  margin: 12px 0;
+  text-align: left;
+  margin-top: 10px;
   color: var(--text-color);
   line-height: 1.5;
 }
@@ -290,7 +294,7 @@
   .profile-page .profile-info {
     flex-direction: column;
     align-items: center;
-    text-align: center;
+    text-align: left;
   }
 
   .profile-page .profile-picture {

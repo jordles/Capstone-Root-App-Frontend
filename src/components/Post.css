@@ -135,7 +135,7 @@
   position: absolute;
   right: 0;
   top: 100%;
-  background: var(--background);
+  background: #222222;
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 8px;

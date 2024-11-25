@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+import './Auth.css';
 
 function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -20,22 +22,26 @@ function ForgotPasswordPage() {
   };
 
   return (
-    <div className="forgot-password-page">
-      <h2>Forgot Password</h2>
-      {message && <div className="success-message" style={{ color: 'green', marginBottom: '1rem' }}>{message}</div>}
-      {error && <div className="error" style={{ color: 'red', marginBottom: '1rem' }}>{error}</div>}
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Send Reset Link</button>
-      </form>
+    <div className="auth-container">
+      <div className="auth-card">
+        <h2 className="auth-title">Reset Password</h2>
+        {message && <div className="success-message">{message}</div>}
+        {error && <div className="error">{error}</div>}
+        <form onSubmit={handleSubmit} className="auth-form">
+          <div className="form-group">
+            <label>Email:</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="auth-input"
+            />
+          </div>
+          <button type="submit" className="auth-button">Send Reset Link</button>
+          <Link to="/login" className="auth-link">Back to Login</Link>
+        </form>
+      </div>
     </div>
   );
 }

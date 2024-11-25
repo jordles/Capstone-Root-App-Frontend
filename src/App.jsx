@@ -12,6 +12,7 @@ import Navbar from './components/Navbar';
 import MessageWidget from './components/MessageWidget';
 import './App.css';
 import SignUpPage from './pages/SignUpPage';
+import HomePage from './pages/HomePage';
 
 // Create auth context
 export const AuthContext = createContext(null);
@@ -40,8 +41,14 @@ function App() {
     fetchUserData();
   }, []);
 
-  const isAuthPage = ['/login', '/forgot-password', '/reset-password'].some(
+  const isAuthPage = ['/login', '/register', '/forgot-password', '/reset-password', '/'].some(
     path => location.pathname.startsWith(path)
+  );
+
+  const shouldShowMessageWidget = isAuthenticated && (
+    location.pathname.startsWith('/feed') ||
+    location.pathname.startsWith('/profile') ||
+    location.pathname.startsWith('/settings')
   );
 
   const authValue = {
@@ -61,12 +68,7 @@ function App() {
           <Routes>
             <Route
               path="/"
-              element={
-                <div>
-                  <h1>Welcome to Root App</h1>
-                </div>
-              }
-            />
+              element={ <HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<SignUpPage />} />
             <Route path="/feed" element={<FeedPage />} />
@@ -77,7 +79,7 @@ function App() {
             <Route path="/settings" element={<SettingsPage />} />
           </Routes>
         </main>
-        {!isAuthPage && <MessageWidget />}
+        {shouldShowMessageWidget && <MessageWidget />}
       </div>
     </AuthContext.Provider>
   );

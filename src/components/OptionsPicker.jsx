@@ -3,7 +3,7 @@ import './PostButton.css';
 import Card from './Card';
 function OptionsPicker({ onEdit, onDelete }) {
   return (
-    <Card style={{marginBottom: 0}}>
+    <Card style={{ marginBottom: 0, backgroundColor: '#222222', boxShadow: 'none' }}>
       <PostButton
         icon="edit"
         label="Edit post"

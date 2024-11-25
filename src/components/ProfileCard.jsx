@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Card from './Card';
 import './ProfileCard.css';
+import Handle from './Handle';
 
 function ProfileCard() {
   const [user, setUser] = useState(null);
@@ -55,7 +56,7 @@ function ProfileCard() {
                 className="profile-pic" 
               />
               <h3>{user.name.display || 'Anonymous'}</h3>
-              <span>@{user.name.handle || '@anonymous'}</span>
+              <Handle handle={user.name.handle || 'anonymous'} />
               <p>{user.bio || 'No bio available'}</p>
             </div>
           </div>

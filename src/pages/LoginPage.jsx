@@ -2,6 +2,7 @@ import { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../App';
+import './Auth.css';
 
 function LoginPage() {
   const [userEmail, setUserEmail] = useState('');
@@ -84,7 +85,7 @@ function LoginPage() {
         <button type="submit">Login</button>
       </form>
       <div style={{ marginTop: '1rem' }}>
-        <Link to="/forgot-password">Forgot Password?</Link>
+        <Link to="/forgot-password" className="forgot-password-link">Forgot Password?</Link>
       </div>
       <div>
         <Link to="/register">Don't have an account? Sign up</Link>

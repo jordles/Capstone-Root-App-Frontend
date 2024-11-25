@@ -1,4 +1,6 @@
 .navbar {
+  position: relative;
+  z-index: 2;
   padding: 5px 20px;
   background-color: var(--card-bg);
   display: flex;

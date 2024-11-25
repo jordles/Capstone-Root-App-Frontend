@@ -1,8 +1,8 @@
 import './Card.css';
 
-const Card = ({ children }) => {
+const Card = ({ children, style }) => {
   return (
-    <div className="card">
+    <div className="card" style={style}>
       {children}
     </div>
   );
