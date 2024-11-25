@@ -15,6 +15,28 @@ This is a simple wireframe of the early stages of my feed/landing page.
 * Main Feed page for posting content with other media features added onto it  (Pages: Feed)
 * Post, edit, delete content on the feed page, which includes emojis, gifs, images and videos
 
+
+## Learning Process
+
+When trying to combine the frontend and backend together, I learned a lot about how to structure a project. One of the things I was eager to implement was js web tokens, but I unfortunately did not have time to learn and implement them. My authorization is checked through local storage, which definitely not safe or ideal. Other things in my local storage include storing your favorite gifs when using the tenor api to grab gifs from. I did implement nodemailer to send emails to users when they reset their password, which was a really cool and fun challenge. It uses its own token to verify the user through the email link. There are various other new hooks i used from react, and react-router-dom had things like navigate which saved me time to switching between pages. 
+
+Password Reset - to implement this functionality I used NodeMailer to send emails to users with a link that they can click on to reset their password. I also used a token to verify the user's email address and prevent unauthorized access.
+
+Reset Token is:
+
+* One-time use only
+* Randomly generated using Node's crypto library
+* Stored as a hash in the database
+* Time-limited (expires in 30 minutes) and will be deleted from the database
+
+Flow:
+
+1. User clicks "Forgot Password?" -> Backend verifies email
+2. Enters email → Backend generates token
+3. User gets email with reset link
+4. Clicks link → Enters new password
+5. Backend verifies token and updates password
+
 ## Requirements
 
 | (20%) Project Structure, Standardization, and Convention | Weight | Finished |
