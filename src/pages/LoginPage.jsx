@@ -32,6 +32,7 @@ function LoginPage() {
         userEmail,
         password
       });
+
       console.log('Server response:', response.data);
       
       if (response.data) {
