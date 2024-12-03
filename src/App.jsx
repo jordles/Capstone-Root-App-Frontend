@@ -66,9 +66,7 @@ function App() {
         <Navbar />
         <main>
           <Routes>
-            <Route
-              path="/"
-              element={ <HomePage />} />
+            <Route path="/" element={ <HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<SignUpPage />} />
             <Route path="/feed" element={<FeedPage />} />

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Post from '../Post';
 import './ProfilePosts.css';
 
-const ProfilePosts = ({ posts }) => {
+const ProfilePosts = ({ posts, onPostsUpdated }) => {
   const [activeCategory, setActiveCategory] = useState('all');
 
   const categories = [
@@ -17,6 +17,18 @@ const ProfilePosts = ({ posts }) => {
     if (activeCategory === 'likes') return post.likes?.length > 0;
     return true;
   });
+
+  const handlePostUpdated = () => {
+    if (onPostsUpdated) {
+      onPostsUpdated();
+    }
+  };
+
+  const handlePostDeleted = (postId) => {
+    if (onPostsUpdated) {
+      onPostsUpdated();
+    }
+  };
 
   return (
     <div className="profile-posts">
@@ -36,7 +48,12 @@ const ProfilePosts = ({ posts }) => {
       <div className="posts-container">
         {filteredPosts && filteredPosts.length > 0 ? (
           filteredPosts.map(post => (
-            <Post key={post._id} post={post} />
+            <Post 
+              key={post._id} 
+              post={post} 
+              onPostUpdated={handlePostUpdated}
+              onPostDeleted={handlePostDeleted}
+            />
           ))
         ) : (
           <div className="no-posts">
