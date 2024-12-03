@@ -1,0 +1,5 @@
+# Settings for Netlify deployment
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
