@@ -1,6 +1,8 @@
 # Capstone Root App Frontend
 This is a mockup of a social media application that allows users to post content and chat with other users. I plan to add more features to this app in the future. The focus is that you have full CRUD functionality for users and their posts. You can message other users and login/logout between users. 
 
+![](https://raw.githubusercontent.com/jordles/Capstone-Root-App-Frontend/refs/heads/main/images/rootApp.gif)
+
 This is a simple wireframe of the early stages of my feed/landing page. 
 
 ![](https://raw.githubusercontent.com/jordles/Capstone-Root-App-Frontend/refs/heads/main/images/root-wireframe.svg)
