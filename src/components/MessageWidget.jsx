@@ -50,6 +50,7 @@ function MessageWidget() {
             return new Date(b.lastMessage.createdAt) - new Date(a.lastMessage.createdAt);
           });
 
+          console.log('Valid conversations:', validConversations);
         setConversations(validConversations);
       } catch (err) {
         console.error('Error fetching conversations:', err);

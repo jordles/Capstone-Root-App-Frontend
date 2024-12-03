@@ -155,12 +155,11 @@ function ProfilePage() {
           </div>
         </div>
 
-        <div className="profile-content">
-          <ProfilePosts posts={posts} />
-        </div>
+        <ProfileDetails user={user} stats={stats} />
+        <ProfilePosts posts={posts} onPostsUpdated={fetchProfileData} />
       </div>
     );
-  }, [loading, error, user, stats, isOwnProfile, handleDeleteAccount, handleMessage, posts]);
+  }, [loading, error, user, stats, isOwnProfile, handleDeleteAccount, handleMessage, posts, fetchProfileData]);
 
   return profileContent;
 }
