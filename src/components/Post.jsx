@@ -88,15 +88,45 @@ function Post({ post, onPostUpdated, onPostDeleted }) {
 
   const handleDelete = async () => {
     try {
+      // First get the post details to get the media URLs
+      const postResponse = await axios.get(`https://capstone-root-app-backend.onrender.com/api/posts/id/${post._id}`);
+      const postWithMedia = postResponse.data;
+      
+      // Delete the post first
       const response = await axios.delete(`https://capstone-root-app-backend.onrender.com/api/posts/${post._id}`);
+      
       if (response.status === 200) {
+        // If post deletion was successful, delete the media files from Cloudinary
+        if (postWithMedia.mediaUrls && postWithMedia.mediaUrls.length > 0) {
+          for (const url of postWithMedia.mediaUrls) {
+            try {
+              console.log('Processing URL:', url);
+              // Extract public_id from Cloudinary URL
+              const matches = url.match(/\/([^/]+)\.[^.]+$/);
+              if (matches && matches[1]) {
+                const publicId = matches[1];
+                const resourceType = url.includes('/video/') ? 'video' : 'image';
+                
+                console.log('Extracted publicId:', publicId);
+                console.log('Resource type:', resourceType);
+                
+                // Delete from Cloudinary
+                const deleteResponse = await axios.post(`https://capstone-root-app-backend.onrender.com/api/cloudinary/delete`, {
+                  publicId,
+                  resourceType
+                });
+                console.log('Cloudinary delete response:', deleteResponse.data);
+              } else {
+                console.error('Could not extract publicId from URL:', url);
+              }
+            } catch (err) {
+              console.error('Error deleting media from Cloudinary:', err.response?.data || err.message);
+            }
+          }
+        }
+        
         onPostDeleted(post._id); // Notify parent to refresh posts
       }
-
-      // const user = await axios.get(`https://capstone-root-app-backend.onrender.com/api/users/${post.user}`);
-      // user.posts.pull(post._id);
-      // user.save();
-      // logic done in the backend already. No need to do it here
     } catch (error) {
       console.error('Error deleting post:', error);
     }
@@ -140,15 +170,25 @@ function Post({ post, onPostUpdated, onPostDeleted }) {
         <p>{post.content}</p>
         {post.mediaUrls && post.mediaUrls.length > 0 && (
           <div className="post-media">
-            {post.mediaUrls.map((url, index) => (
-              <div key={index} className="media-container">
-                {url.startsWith('data:image') || url.endsWith('.gif') ? (
-                  <img src={url} alt={`Post media ${index + 1}`} />
-                ) : url.startsWith('data:video') ? (
-                  <video src={url} controls />
-                ) : null}
-              </div>
-            ))}
+            {post.mediaUrls.map((url, index) => {
+              // Check if it's a video by looking at the file extension or Cloudinary URL format
+              const isVideo = url.match(/\.(mp4|webm|ogg)$/) || 
+                            url.includes('/video/') ||
+                            url.startsWith('data:video');
+              
+              // All other URLs are treated as images
+              const isImage = !isVideo;
+              
+              return (
+                <div key={index} className="media-container">
+                  {isImage ? (
+                    <img src={url} alt={`Post media ${index + 1}`} />
+                  ) : (
+                    <video src={url} controls />
+                  )}
+                </div>
+              );
+            })}
           </div>
         )}
       </div>
