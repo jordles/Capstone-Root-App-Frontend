@@ -20,6 +20,10 @@ This is a simple wireframe of the early stages of my feed/landing page.
 * Post, edit, delete content on the feed page, which includes emojis, gifs, images and videos
 
 
+## Recent Implementations  
+
+* Utilizing Cloudinary to store uploaded images and videos, max file size is 500mb. (12/05/2024)
+
 ## Learning Process
 
 When trying to combine the frontend and backend together, I learned a lot about how to structure a project. One of the things I was eager to implement was js web tokens, but I unfortunately did not have time to learn and implement them. My authorization is checked through local storage, which definitely not safe or ideal. Other things in my local storage include storing your favorite gifs when using the tenor api to grab gifs from. I did implement nodemailer to send emails to users when they reset their password, which was a really cool and fun challenge. It uses its own token to verify the user through the email link. There are various other new hooks i used from react, and react-router-dom had things like navigate which saved me time to switching between pages. 
@@ -90,5 +94,6 @@ emoji-picker-react - for emoji picker on posts and messages
 memo - for preventing unnecessary re-renders when react re-renders media preview because of CreatePost parent re-renders  (The difference between these two is that : useRef=> "Keep this value the same between renders" vs memo => "Don't render at all if nothing changed"  )
   
 ## API (Third Party)
-[tenor](https://tenor.com/gifapi)- incorporated gif images into my messages and post functionalities
+[tenor](https://tenor.com/gifapi)- incorporated gif images into my messages and post functionalities  
+[cloudinary](cloudinary.com) - media storage
 
