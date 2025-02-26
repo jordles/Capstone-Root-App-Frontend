@@ -4,7 +4,7 @@ import './ProfilePic.css'
 const ProfilePic = ({user}) => {
   return (
     <img className = "profilePic"
-      src={user.profilePicture || "https://via.placeholder.com/40"} 
+      src={user.profilePicture || "https://placehold.co/40"} 
       alt={user.name.display}
     />
   );

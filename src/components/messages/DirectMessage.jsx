@@ -73,7 +73,7 @@ function DirectMessage({ recipient, onClose, onMessageSent }) {
         </button>
         <div className="recipient-info">
           <img 
-            src={recipient.profilePicture || "https://via.placeholder.com/40"} 
+            src={recipient.profilePicture || "https://placehold.co/40"} 
             alt={recipient.name.display} 
           />
           <span>{recipient.name.display}</span>

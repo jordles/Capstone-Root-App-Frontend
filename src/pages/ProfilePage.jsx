@@ -96,7 +96,7 @@ function ProfilePage() {
         <div className="profile-header">
           <div className="profile-cover">
             <img 
-              src={user.coverPicture || "https://via.placeholder.com/1000x300"} 
+              src={user.coverPicture || "https://placehold.co/1000x300"} 
               alt="Cover" 
               className="cover-image"
               loading="lazy"
@@ -105,7 +105,7 @@ function ProfilePage() {
           <div className="profile-info">
             <div className="profile-picture">
               <img 
-                src={user.profilePicture || "https://via.placeholder.com/150"} 
+                src={user.profilePicture || "https://placehold.co/150"} 
                 alt={user.name.display}
                 loading="lazy"
               />

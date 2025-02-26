@@ -136,7 +136,7 @@ function Post({ post, onPostUpdated, onPostDeleted }) {
   return (
     <div className="post-card">
       <div className="post-header">
-        <img src="https://via.placeholder.com/50" alt="Author" />
+        <img src="https://placehold.co/50" alt="Author" />
         <div className="post-author">
           <h4>{isDeleted ? 'Deleted User' : (userDetails ? userDetails.name.display : 'loading...')}</h4>
           <span>@{isDeleted ? 'deleted' : (userDetails ? userDetails.name.handle : 'loading...')}</span>

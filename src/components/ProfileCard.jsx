@@ -51,7 +51,7 @@ function ProfileCard() {
             <div className="profile-background"></div>
             <div className="profile-info">
               <img 
-                src={user.profilePicture || "https://via.placeholder.com/150"}
+                src={user.profilePicture || "https://placehold.co/150"}
                 alt={user.name.display || 'Profile'} 
                 className="profile-pic" 
               />

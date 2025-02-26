@@ -56,7 +56,7 @@ function FriendSuggestions() {
             <li key={user._id}>
               <Link to={`/profile/${user.name.handle}`} className="user-info">
                 <img 
-                  src={user.profilePicture || "https://via.placeholder.com/40"} 
+                  src={user.profilePicture || "https://placehold.co/40"} 
                   alt={user.name.display || 'User'} 
                 />
                 <div className="user-details">
