@@ -129,7 +129,7 @@ function MessageWidget() {
                   >
                     {/* <ProfilePic user={conv} /> */}
                     <img 
-                      src={conv.profilePicture || "https://via.placeholder.com/40"} 
+                      src={conv.profilePicture || "https://placehold.co/40"} 
                       alt={conv.name.display}
                     />
                     <div className="conversation-info">

@@ -1,7 +1,7 @@
 # Capstone Root App Frontend
 This is a mockup of a social media application that allows users to post content and chat with other users. I plan to add more features to this app in the future. The focus is that you have full CRUD functionality for users and their posts. You can message other users and login/logout between users. 
 
-~~## ** If you notice a long wait time for logging in initially, the long initial login time (around 10 seconds) is likely due to Render's free tier behavior. When using Render's free tier, your backend server goes into a "sleep" mode after 15 minutes of inactivity. When a new request comes in (like a login attempt), the server needs to "wake up" which can take several seconds. This should go away after the initial login. ** ##~~ **Resolved on later update**
+## ** If you notice a long wait time for logging in initially, the long initial login time (around 10 seconds) is likely due to Render's free tier behavior. When using Render's free tier, your backend server goes into a "sleep" mode after 15 minutes of inactivity. When a new request comes in (like a login attempt), the server needs to "wake up" which can take several seconds. This should go away after the initial login. ** ## 
 
 ![](https://raw.githubusercontent.com/jordles/Capstone-Root-App-Frontend/refs/heads/main/images/rootApp.gif)
 
@@ -25,7 +25,7 @@ This is a simple wireframe of the early stages of my feed/landing page.
 ## Recent Implementations  
 
 * Utilizing Cloudinary to store uploaded images and videos, max file size is 500mb. 
-* Ping our backend server to check if it is online and avoid wait time for initial login.
+* Ping our backend server to check if it is online and avoid longer wait time for initial logins.
 
 ## Learning Process
 

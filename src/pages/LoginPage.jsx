@@ -8,6 +8,7 @@ function LoginPage() {
   const [userEmail, setUserEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { setIsAuthenticated, setUserId, setUserHandle } = useContext(AuthContext);
 
@@ -39,7 +40,7 @@ function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    
+    setLoading(true);
     try {
       console.log('Attempting login with:', { userEmail, password });
       const response = await axios.post('https://capstone-root-app-backend.onrender.com/api/users/login', {
@@ -71,6 +72,8 @@ function LoginPage() {
     } catch (err) {
       console.error('Login error:', err.response?.data || err.message);
       setError(err.response?.data?.error || 'Login failed');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -97,7 +100,9 @@ function LoginPage() {
             required
           />
         </div>
-        <button type="submit">Login</button>
+        <button type="submit" disabled={loading}>
+          {loading ? 'Logging in...' : 'Login'}
+        </button>
       </form>
       <div style={{ marginTop: '1rem' }}>
         <Link to="/forgot-password" className="forgot-password-link">Forgot Password?</Link>
