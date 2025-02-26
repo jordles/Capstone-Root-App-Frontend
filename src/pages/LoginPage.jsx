@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../App';
@@ -10,6 +10,20 @@ function LoginPage() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const { setIsAuthenticated, setUserId, setUserHandle } = useContext(AuthContext);
+
+  // Ping the server when the component mounts
+  useEffect(() => {
+    const pingServer = async () => {
+      try {
+        await axios.get('https://capstone-root-app-backend.onrender.com');
+        console.log('Server pinged successfully');
+      } catch (err) {
+        console.error('Error pinging server:', err);
+      }
+    };
+
+    pingServer();
+  }, []);
 
   const grabLogin = async () => {
     try {
